@@ -1,3 +1,4 @@
+import EventListener from "./EventListener";
 import Parser from "./parser";
 
 class Manager {
@@ -38,7 +39,7 @@ class Manager {
             const buffer = new Uint8Array(event.data);
             const frame = this.parser.decode(buffer);
             
-            console.log(frame);
+            this.eventListener.notifyListener(frame)
         };
 
         ws.onerror = (error) => {

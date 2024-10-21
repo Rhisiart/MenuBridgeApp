@@ -1,3 +1,5 @@
+import { IFrame } from "@/types/interface";
+
 class EventListener {
     private listoners: {[key: string]: Function}
 
@@ -14,10 +16,20 @@ class EventListener {
             return;
         }
 
-        //Object.keys()
+        delete this.listoners[event];
     }
 
-    notifyListener() {
+    notifyListener(data: IFrame) {
+        const event = data.cmd;
 
+        if(!this.listoners[event]) {
+            return;
+        }
+
+        const callback = this.listoners[event];
+
+        callback(data);
     }
 }
+
+export default EventListener;
