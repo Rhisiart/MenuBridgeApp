@@ -1,4 +1,4 @@
-import EventListener from "./EventListener";
+import EventListener from "./eventListener";
 import Parser from "./parser";
 
 class Manager {
@@ -25,6 +25,7 @@ class Manager {
 
     private connect() {
         const ws = new WebSocket(this.url);
+        ws.binaryType = "arraybuffer";
     
         ws.onopen = () => {
             console.log('Connected to WebSocket');
@@ -50,8 +51,6 @@ class Manager {
             console.log('WebSocket connection closed');
         };
 
-        ws.binaryType = "arraybuffer";
-
         return ws;
     }
 
@@ -60,7 +59,7 @@ class Manager {
         sequence: number,
         data: Uint8Array
     ) {
-        this.ws.send(new Parser().encode(cmd, sequence, data))
+        this.ws.send(this.parser.encode(cmd, sequence, data))
     }
 }
 
