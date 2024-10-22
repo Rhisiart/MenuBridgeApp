@@ -6,7 +6,7 @@ class Manager {
     private ws: WebSocket;
     private url: string;
     private parser: Parser;
-    private eventListener: EventListener;
+    public eventListener: EventListener;
 
     private constructor(url: string, parser: Parser) {
         this.parser = parser;
@@ -40,7 +40,7 @@ class Manager {
             const buffer = new Uint8Array(event.data);
             const frame = this.parser.decode(buffer);
             
-            this.eventListener.notifyListener(frame)
+           // this.eventListener.notifyListener(frame)
         };
 
         ws.onerror = (error) => {
