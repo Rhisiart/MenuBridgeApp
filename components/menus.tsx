@@ -1,4 +1,6 @@
 import { useWebSocket } from "@/context/useWebSocket";
+import { Commands } from "@/types/enum";
+import { Buffer } from 'buffer';
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 
@@ -16,24 +18,19 @@ const Menus: React.FC<IProps> = () => {
             return;
         }
 
-        console.log("Pressing the button")
-
-        ws.eventListener.notifyListener("Menus", ["Bitoque", "Bacalhau com natas"])
+        ws.send(Commands.Menus, 1, new Uint8Array());
     }
 
     useEffect(() => {
-        console.log(ws)
-
         if(!ws) {
-            console.log("not found a ws")
             return;
         }
-        
-        console.log("Found a ws")
 
-        ws.eventListener.addEvent("Menus", (data: string[]) => {
-            console.log("Updating the Menus array");
-            setMenus(data)
+        ws.eventListener.addEvent("Menus", (data: Uint8Array) => {
+            const str = Buffer.from(data).toString('utf-8');
+            const menus: string[] = JSON.parse(str);
+
+            setMenus(menus)
         });
 
         return () => {

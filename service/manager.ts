@@ -1,3 +1,4 @@
+import { Commands } from "@/types/enum";
 import EventListener from "./eventListener";
 import Parser from "./parser";
 
@@ -40,7 +41,7 @@ class Manager {
             const buffer = new Uint8Array(event.data);
             const frame = this.parser.decode(buffer);
             
-           // this.eventListener.notifyListener(frame)
+           this.eventListener.notifyListener(Commands[frame.cmd], frame.data)
         };
 
         ws.onerror = (error) => {
