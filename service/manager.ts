@@ -60,7 +60,8 @@ class Manager {
         sequence: number,
         data: Uint8Array
     ) {
-        this.ws.send(this.parser.encode(cmd, sequence, data))
+        console.log("sending the request");
+        this.ws.send(this.parser.encode(cmd, sequence, data));
     }
 }
 

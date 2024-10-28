@@ -1,12 +1,12 @@
 import { useWebSocket } from "@/context/useWebSocket";
 import { Commands } from "@/types/enum";
 import { Buffer } from "buffer";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
 interface IProps {}
 
-const Menus: React.FC<IProps> = () => {
+const Menus: FC<IProps> = () => {
   const [menus, setMenus] = useState<string[]>();
 
   const ws = useWebSocket();
@@ -23,7 +23,7 @@ const Menus: React.FC<IProps> = () => {
       setMenus(menus);
     });
 
-    ws.send(Commands.Menus, 1, new Uint8Array());
+    ws.send(Commands.Menus, 1, new Uint8Array(1));
 
     return () => {
       ws.eventListener.removeEvent("Menus");
