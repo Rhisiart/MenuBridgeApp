@@ -1,4 +1,4 @@
 export enum Commands {
-    "Open" = 1,
-    "Menus" = 2
+  "Open" = 1,
+  "Menus" = 2,
 }
