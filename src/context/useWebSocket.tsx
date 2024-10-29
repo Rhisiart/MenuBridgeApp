@@ -1,5 +1,5 @@
-import Manager from "@/service/manager";
-import Parser from "@/service/parser";
+import Manager from "@/src/service/manager";
+import Parser from "@/src/service/parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface IProps {

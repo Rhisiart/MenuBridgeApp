@@ -1,5 +1,6 @@
-import WebSocketProvider from "@/context/useWebSocket";
+import WebSocketProvider from "@/src/context/useWebSocket";
 import { Stack } from "expo-router";
+import "../styles/global.css";
 
 export default function RootLayout() {
   return (

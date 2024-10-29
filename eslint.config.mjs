@@ -72,5 +72,7 @@ export default [{
         "react/no-unknown-property": "error",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
+
+        
     },
 }];

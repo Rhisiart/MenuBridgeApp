@@ -1,5 +1,5 @@
-import { useWebSocket } from "@/context/useWebSocket";
-import { Commands } from "@/types/enum";
+import { useWebSocket } from "@/src/context/useWebSocket";
+import { Commands } from "@/src/types/enum";
 import { Buffer } from "buffer";
 import { FC, useEffect, useState } from "react";
 import { Text, View } from "react-native";
@@ -34,7 +34,7 @@ const Menus: FC<IProps> = () => {
     <View>
       {menus &&
         menus.map((menu) => {
-          return <Text key={menu}>{menu}</Text>;
+          return <Text className="bg-blue-400 text-lg" key={menu}>{menu}</Text>;
         })}
     </View>
   );

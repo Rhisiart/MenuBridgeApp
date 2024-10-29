@@ -1,4 +1,4 @@
-import { Commands } from "@/types/enum";
+import { Commands } from "@/src/types/enum";
 import EventListener from "./eventListener";
 import Parser from "./parser";
 
