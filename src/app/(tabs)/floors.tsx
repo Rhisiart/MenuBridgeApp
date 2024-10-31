@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Floor from "@/src/components/floor";
+import { useWebSocket } from "@/src/context/useWebSocket";
+import { Commands } from "@/src/types/enum";
+import { IFloor } from "@/src/types/interface";
+import { Buffer } from "buffer";
+import React, { useEffect, useState } from "react";
+import { FlatList, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Floors() {
-    //const [floors, setFloors] = useState<IFloor[]>();
-    const [selectedFloor, setSelectedFloor] = useState<string>('Ground Floor');
+    const [floors, setFloors] = useState<IFloor[]>();
+    const [floorSelected, setFloorSelected] = useState<IFloor>();
 
-    const floors = ["Ground Floor", "1st Floor", "2nd Floor", "3nd Floor", "Rooftop"];
-    /*const ws = useWebSocket();
+    const ws = useWebSocket();
 
     useEffect(() => {
         if(!ws) {
@@ -26,34 +30,59 @@ export default function Floors() {
             ws.eventListener.removeEvent("Floors");
         };
 
-    }, [])*/
+    }, [])
+
+    useEffect(() => {
+        if(!floors || floors.length === 0)
+            return;
+
+        setFloorSelected(floors[0]);
+    }, [floors])
+
+    const renderItem = (itemInfo: ListRenderItemInfo<IFloor>) => (
+        <TouchableOpacity
+            onPress={() => setFloorSelected(itemInfo.item)}
+            style={[
+                styles.button,
+                floorSelected && floorSelected.id === itemInfo.item.id && styles.selectedButton,
+            ]}
+        >
+            <Text 
+                style={floorSelected && floorSelected.id === itemInfo.item.id 
+                ? styles.selectedText 
+                : styles.text}
+            >
+                {itemInfo.item.name}
+            </Text>
+        </TouchableOpacity>
+    );
 
     return (
-        <View style={styles.container}>
-          {floors.map((floor) => (
-            <TouchableOpacity
-              key={floor}
-              onPress={() => setSelectedFloor(floor)}
-              style={[
-                styles.button,
-                selectedFloor === floor && styles.selectedButton,
-              ]}
-            >
-              <Text style={selectedFloor === floor ? styles.selectedText : styles.text}>
-                {floor}
-              </Text>
-            </TouchableOpacity>
-          ))}
+        <View>
+            <View style={styles.container}>
+            {floors && <FlatList
+                            data={floors}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.name}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.carousel}
+                        />
+            }
+            </View>
+            <View>
+            {floorSelected && <Floor floor={floorSelected}/>}
+            </View>
         </View>
-      );
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems: 'center',
       paddingVertical: 10,
+    },
+    carousel: {
+      paddingHorizontal: 10,
     },
     button: {
       paddingVertical: 8,
@@ -62,9 +91,10 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: '#ccc',
       backgroundColor: '#fff',
+      marginRight: 10, // Space between buttons
     },
     selectedButton: {
-      backgroundColor: '#000',
+      backgroundColor: '#000', // Adjust to your preferred active color
       borderColor: '#000',
     },
     text: {

@@ -1,6 +1,7 @@
 import Menu from "@/src/components/menu";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
+import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 
