@@ -17,6 +17,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="floors"
+        options={{
+          title: "Floor",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={28} name="table" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="menu"
         options={{
           title: "Menu",

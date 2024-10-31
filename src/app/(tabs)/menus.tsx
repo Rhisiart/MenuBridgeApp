@@ -1,12 +1,10 @@
+import Menu from "@/src/components/menu";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
-import { Buffer } from "buffer";
-import { FC, useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView } from "react-native";
 
-interface IProps {}
-
-const Menus: FC<IProps> = () => {
+export default function Menus() {
   const [menus, setMenus] = useState<string[]>();
 
   const ws = useWebSocket();
@@ -31,13 +29,11 @@ const Menus: FC<IProps> = () => {
   }, [ws]);
 
   return (
-    <View>
-      {menus &&
-        menus.map((menu) => {
-          return <Text className="bg-blue-400 text-lg" key={menu}>{menu}</Text>;
-        })}
-    </View>
+    <>
+      {menus && <ScrollView showsVerticalScrollIndicator={false}>
+        {menus.map((menu) => <Menu key={menu} name={menu}/>)}
+        </ScrollView>
+      }
+    </>
   );
-};
-
-export default Menus;
+}

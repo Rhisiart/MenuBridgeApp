@@ -5,3 +5,14 @@ export interface IFrame {
   dataLength: number;
   data: Uint8Array;
 }
+
+export interface IFloor {
+  id: number,
+  name: string, 
+  tables: ITable[],
+}
+
+export interface ITable {
+  id: number,
+	capacity: number,
+}
