@@ -6,9 +6,12 @@ export interface IFrame {
   data: Uint8Array;
 }
 
-export interface IFloor {
+export interface ITab {
   id: number,
-  name: string, 
+  name: string,
+}
+
+export interface IFloor extends ITab { 
   tables: ITable[],
 }
 

@@ -1,9 +1,11 @@
+import Header from "@/src/components/header";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
   return (
     <Tabs
+      sceneContainerStyle={{backgroundColor: "#fff"}}
       screenOptions={{
         tabBarActiveTintColor: "blue",
       }}>
@@ -19,10 +21,11 @@ export default function TabLayout() {
       <Tabs.Screen
         name="floors"
         options={{
-          title: "Floor",
+          title: "Select table",
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="table" color={color} />
           ),
+          header: () => <Header title="Select table" hasDivider={false} />,
         }}
       />
       <Tabs.Screen

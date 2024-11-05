@@ -1,10 +1,12 @@
+import Divider from "@/src/components/divider";
 import Floor from "@/src/components/floor";
+import Tabbar from "@/src/components/tabbar";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
 import { IFloor } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
-import { FlatList, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function Floors() {
     const [floors, setFloors] = useState<IFloor[]>();
@@ -39,38 +41,19 @@ export default function Floors() {
         setFloorSelected(floors[0]);
     }, [floors])
 
-    const renderItem = (itemInfo: ListRenderItemInfo<IFloor>) => (
-        <TouchableOpacity
-            onPress={() => setFloorSelected(itemInfo.item)}
-            style={[
-                styles.button,
-                floorSelected && floorSelected.id === itemInfo.item.id && styles.selectedButton,
-            ]}
-        >
-            <Text 
-                style={floorSelected && floorSelected.id === itemInfo.item.id 
-                ? styles.selectedText 
-                : styles.text}
-            >
-                {itemInfo.item.name}
-            </Text>
-        </TouchableOpacity>
-    );
 
     return (
         <View>
-            <View style={styles.container}>
-            {floors && <FlatList
-                            data={floors}
-                            renderItem={renderItem}
-                            keyExtractor={(item) => item.name}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.carousel}
-                        />
+            <View className="bg-white" style={styles.container}>
+            {floors && floorSelected && <Tabbar 
+                    items={floors} 
+                    tabSelected={floorSelected}
+                    onSelected={(tabSelected) => setFloorSelected(tabSelected as IFloor)}
+                />
             }
             </View>
-            <View>
+            <Divider />
+            <View className="mt-5">
             {floorSelected && <Floor floor={floorSelected}/>}
             </View>
         </View>
@@ -79,28 +62,28 @@ export default function Floors() {
 
 const styles = StyleSheet.create({
     container: {
-      paddingVertical: 10,
+        paddingVertical: 10,
     },
     carousel: {
-      paddingHorizontal: 10,
+        paddingHorizontal: 10,
     },
     button: {
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-      borderRadius: 20,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      backgroundColor: '#fff',
-      marginRight: 10, // Space between buttons
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        backgroundColor: '#fff',
+        marginRight: 10, // Space between buttons
     },
     selectedButton: {
-      backgroundColor: '#000', // Adjust to your preferred active color
-      borderColor: '#000',
+        backgroundColor: '#000', // Adjust to your preferred active color
+        borderColor: '#000',
     },
     text: {
-      color: '#000',
+        color: '#000',
     },
     selectedText: {
-      color: '#fff',
+        color: '#fff',
     },
-  });
+});
