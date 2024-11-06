@@ -6,7 +6,7 @@ import { Commands } from "@/src/types/enum";
 import { IFloor } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 export default function Floors() {
     const [floors, setFloors] = useState<IFloor[]>();
@@ -44,7 +44,7 @@ export default function Floors() {
 
     return (
         <View>
-            <View className="bg-white" style={styles.container}>
+            <View className="bg-white pt-5 pb-3">
             {floors && floorSelected && <Tabbar 
                     items={floors} 
                     tabSelected={floorSelected}
@@ -59,31 +59,3 @@ export default function Floors() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        paddingVertical: 10,
-    },
-    carousel: {
-        paddingHorizontal: 10,
-    },
-    button: {
-        paddingVertical: 8,
-        paddingHorizontal: 15,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        backgroundColor: '#fff',
-        marginRight: 10, // Space between buttons
-    },
-    selectedButton: {
-        backgroundColor: '#000', // Adjust to your preferred active color
-        borderColor: '#000',
-    },
-    text: {
-        color: '#000',
-    },
-    selectedText: {
-        color: '#fff',
-    },
-});

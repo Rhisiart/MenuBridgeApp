@@ -57,10 +57,12 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#000',
-        fontSize: 12,
+        paddingVertical: 2,
+        fontSize: 16,
     },
     selectedText: {
         color: '#fff',
+        fontSize: 16,
     },
 });
 

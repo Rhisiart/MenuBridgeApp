@@ -7,7 +7,7 @@ import "../styles/global.css";
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="flex-1">
+      <SafeAreaView className="flex-1 font-roboto">
         <WebSocketProvider url={`ws://${process.env.EXPO_PUBLIC_IP}:8080/ws`}>
           <Stack>
             <Stack.Screen
