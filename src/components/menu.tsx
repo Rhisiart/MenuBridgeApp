@@ -1,35 +1,56 @@
-import { FC } from "react";
-import { Image, Text, View } from "react-native";
+import { FC, useReducer } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+
+type action = "increment" | "decrement";
 
 interface IProps {
     name: string,
 }
 
 const Menu: FC<IProps> = ({name}) => {
+    const reducer = (state: number, action: action) => {
+        switch (action) {
+            case "increment":
+                return state + 1;
+            case "decrement":
+                return state - 1;
+            default:
+                return state;
+        }
+    }
+
+    const [state, dispach] = useReducer(reducer, 1);
+
     return (
-        <View className="flex-shrink-0 m-3 relative overflow-hidden bg-white rounded-lg max-w-s shadow-lg">
-            <View className="relative pt-10 px-10 flex items-center justify-center">
-                <Image 
-                    className="relative w-40"
-                    source={require("../../assets/images/react-logo.png")}
-                />
-            </View>
-            <View className="relative text-white px-6 pb-6 mt-6">
-                <Text className="block opacity-75 -mb-1">{name}</Text>
-                <View className="flex justify-between">
-                    <Text 
-                        className="block font-semibold text-xl"
+        <View className="h-40 flex-row items-center p-2 border-b border-gray-200">
+            <Image className="w-40 h-full" source={require("../../assets/images/react-logo.png")} />
+            <View className="m-3">
+                <View className="flex-1">
+                    <Text className="text-lg font-semibold">{name}</Text>
+                    <Text className="text-gray-500 text-lg">{10}€</Text>
+                </View>
+                <View className="flex-row items-center">
+                    <TouchableOpacity 
+                        className="w-10 h-10 bg-gray-100 
+                        rounded-xl justify-center items-center"
+                        onPress={() => dispach("decrement")}
                     >
-                        description asdadahsjdlajks asd jkad asd ajkdsh asjd ajskd hajk
-                    </Text>
-                    <Text 
-                        className="block bg-white rounded-full text-orange-500 text-xs font-bold px-3 py-2 leading-none flex items-center"
+                        <Text className="text-3xl text-black">-</Text>
+                    </TouchableOpacity>
+                    <Text className="px-3 text-lg font-bold">{state}</Text>
+                    <TouchableOpacity 
+                        className="w-10 h-10 bg-gray-100 
+                        rounded-xl justify-center items-center"
+                        onPress={() => dispach("increment")}
                     >
-                        1
-                    </Text>
+                        <Text className="text-3xl text-black">+</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-        </View>
+            <TouchableOpacity>
+                <Text className="text-gray-400 text-lg">›</Text>
+            </TouchableOpacity>
+    </View>
     )
 }
 
