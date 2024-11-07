@@ -23,7 +23,7 @@ const Table: FC<IProps> = ({table}) => {
                     fontSize="16"
                     fill="#6b7b8c"
                     >
-                        {table.id}
+                        {table.number}
                     </SvgText>
                     <Rect x="30" y="10" width="60" height="10" fill="black" rx="3"/> 
                     <Rect x="30" y="90" width="60" height="10" fill="black" rx="3"/>
@@ -41,7 +41,7 @@ const Table: FC<IProps> = ({table}) => {
                     fontSize="16"
                         fill="#6b7b8c"
                     >
-                        {table.id}
+                        {table.number}
                     </SvgText>
                     <Rect x="35" y="10" width="65" height="10" fill="black" rx="3"/> 
                     <Rect x="105" y="10" width="65" height="10" fill="black" rx="3"/> 

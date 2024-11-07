@@ -17,5 +17,6 @@ export interface IFloor extends ITab {
 
 export interface ITable {
   id: number,
+  number: number,
 	capacity: number,
 }

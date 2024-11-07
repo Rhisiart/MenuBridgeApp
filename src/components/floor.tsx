@@ -10,8 +10,8 @@ interface IProps {
 const Floor: FC<IProps> = ({floor}) => {
     return (
         <View className="flex-row flex-wrap justify-center mx-auto">
-        { floor.tables.map((table) => 
-            <Table key={`${floor.id-table.id}`} table={table}/>
+        { floor.tables.map((table, idx) => 
+            <Table key={`${idx}`} table={table}/>
         ) }
         </View>
     )
