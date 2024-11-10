@@ -27,6 +27,8 @@ class Manager {
     private connect() {
         const ws = new WebSocket(this.url);
         ws.binaryType = "arraybuffer";
+
+        console.log(ws);
     
         ws.onopen = () => {
             console.log('Connected to WebSocket');

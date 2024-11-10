@@ -20,6 +20,8 @@ export default function Floors() {
         }
 
         ws.eventListener.addEvent("Floors", (data: Uint8Array) => {
+            console.log("Getting floors");
+
             const str = Buffer.from(data).toString("utf-8");
             const floors: IFloor[] = JSON.parse(str);
 
@@ -44,7 +46,7 @@ export default function Floors() {
 
     return (
         <View>
-            <View className="bg-white pt-5 pb-3">
+            <View className="bg-white pt-5 pb-3 h-24">
             {floors && floorSelected && <Tabbar 
                     items={floors} 
                     tabSelected={floorSelected}

@@ -50,17 +50,18 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     selectedButton: {
-        borderRadius: 20,
+        borderRadius: 30,
         borderWidth: 1,
         backgroundColor: '#000',
         borderColor: '#000',
     },
     text: {
         color: '#000',
-        paddingVertical: 2,
+        paddingVertical: 8,
         fontSize: 16,
     },
     selectedText: {
+        paddingVertical: 8,
         color: '#fff',
         fontSize: 16,
     },

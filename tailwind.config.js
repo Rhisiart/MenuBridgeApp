@@ -4,7 +4,11 @@ module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      boxShadow: {
+        "3xl": "0px 2px 3px rgb(128,128,128)",
+      },
+    },
     fontFamily: {
       roboto: ["Roboto", "sans-serif"],
     },

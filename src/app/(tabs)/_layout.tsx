@@ -7,7 +7,9 @@ export default function TabLayout() {
     <Tabs
       sceneContainerStyle={{backgroundColor: "#fff"}}
       screenOptions={{
-        tabBarActiveTintColor: "blue",
+        headerTitleAlign: "center",
+        headerShadowVisible: false,
+        tabBarActiveTintColor: "black",
       }}>
       <Tabs.Screen
         name="index"
@@ -26,15 +28,6 @@ export default function TabLayout() {
             <FontAwesome size={28} name="table" color={color} />
           ),
           header: () => <Header title="Select table" hasDivider={false} />,
-        }}
-      />
-      <Tabs.Screen
-        name="menus"
-        options={{
-          title: "Menu",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="search" color={color} />
-          ),
         }}
       />
     </Tabs>

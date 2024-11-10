@@ -10,7 +10,7 @@ interface IProps {
 
 const Table: FC<IProps> = ({table}) => {
     return (
-        <Link href="/(tabs)/menus" asChild> 
+        <Link href="/menus" asChild> 
             <Pressable>
             {table.capacity === 4 ? (
                 <Svg width="120" height="100">
