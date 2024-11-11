@@ -2,16 +2,16 @@ import Divider from "@/src/components/divider";
 import Menu from "@/src/components/menu";
 import Tabbar from "@/src/components/tabbar";
 import { useWebSocket } from "@/src/context/useWebSocket";
-import { IFloor, ITab } from "@/src/types/interface";
+import { ICategory, IMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { Commands } from "../types/enum";
 
 export default function Menus() {
-  const [categories, setCategories] = useState<ITab[]>([{id: 1, name: "Starter"}, {id: 2, name: "Main Course"}, {id: 3, name: "Pasta"}, {id: 4, name: "Soup"}, {id: 5, name: "Dessert"}]);
-  const [categorySelected, setCategorySelected] = useState<ITab>({id: 2, name: "Main Course"});
-  const [menus, setMenus] = useState<string[]>(["Beef fillet", "Penne mediterranean", "Sea food mix", "Grilled Salmon", "Beef fillet", "Hamburger", "Pizza"]);
+  const [categories, setCategories] = useState<ICategory[]>();
+  const [categorySelected, setCategorySelected] = useState<ICategory>();
+  const [menus, setMenus] = useState<IMenu[]>();
 
   const ws = useWebSocket();
 
@@ -22,9 +22,14 @@ export default function Menus() {
 
     ws.eventListener.addEvent("Menus", (data: Uint8Array) => {
       const str = Buffer.from(data).toString("utf-8");
-      const menus: string[] = JSON.parse(str);
+      const categories: ICategory[] = JSON.parse(str);
 
-      setMenus(menus);
+      if(!categories || categories.length === 0) {
+        return; 
+      }
+
+      setCategories(categories);
+      setCategorySelected(categories[0]);
     });
 
     ws.send(Commands.Menus, 1, new Uint8Array(1));
@@ -40,16 +45,18 @@ export default function Menus() {
         {categories && categorySelected && <Tabbar 
                 items={categories} 
                 tabSelected={categorySelected}
-                onSelected={(tabSelected) => setCategorySelected(tabSelected as IFloor)}
+                onSelected={(tabSelected) => setCategorySelected(tabSelected as ICategory)}
             />
         }
       </View>
-      <Divider />
-      {menus && <FlatList 
-                data={menus}
-                keyExtractor={(item, idx) => `${item}_${idx}`}
-                renderItem={(item) => <Menu name={item.item}/>}
+      <Divider hasShadow />
+      {categorySelected && <FlatList 
+                data={categorySelected.menus}
+                keyExtractor={item => `${item.id}_${item.name}`}
+                renderItem={(item) => <Menu menu={item.item}/>}
                 showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 82}}
+                ItemSeparatorComponent={() => <Divider hasShadow={false} />}
               />
       }
     </View>

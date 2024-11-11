@@ -32,7 +32,7 @@ class Manager {
             console.log('Connected to WebSocket');
 
             const data = new TextEncoder().encode("Hello World");
-            const buf = this.parser.encode(1, 1, data);
+            const buf = this.parser.encode(0, 1, data);
 
             ws.send(buf);
         };

@@ -20,3 +20,12 @@ export interface ITable {
   number: number,
 	capacity: number,
 }
+
+export interface IMenu extends ITab {
+  description: string,
+  price: number,
+}
+
+export interface ICategory extends ITab {
+  menus: IMenu[],
+}

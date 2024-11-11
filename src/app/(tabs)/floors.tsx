@@ -25,7 +25,12 @@ export default function Floors() {
             const str = Buffer.from(data).toString("utf-8");
             const floors: IFloor[] = JSON.parse(str);
 
+            if(!floors || floors.length === 0) {
+                return;
+            }
+
             setFloors(floors);
+            setFloorSelected(floors[0]);
         });
 
         ws.send(Commands.Floors, 1, new Uint8Array(1));
@@ -35,14 +40,6 @@ export default function Floors() {
         };
 
     }, [])
-
-    useEffect(() => {
-        if(!floors || floors.length === 0)
-            return;
-
-        setFloorSelected(floors[0]);
-    }, [floors])
-
 
     return (
         <View>
@@ -54,7 +51,7 @@ export default function Floors() {
                 />
             }
             </View>
-            <Divider />
+            <Divider hasShadow />
             <View className="mt-5">
             {floorSelected && <Floor floor={floorSelected}/>}
             </View>

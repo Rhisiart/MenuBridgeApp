@@ -1,13 +1,14 @@
 import { FC, useReducer } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import { IMenu } from "../types/interface";
 
 type action = "increment" | "decrement";
 
 interface IProps {
-    name: string,
+    menu: IMenu,
 }
 
-const Menu: FC<IProps> = ({name}) => {
+const Menu: FC<IProps> = ({menu}) => {
     const reducer = (state: number, action: action) => {
         switch (action) {
             case "increment":
@@ -26,8 +27,8 @@ const Menu: FC<IProps> = ({name}) => {
             <Image className="w-40 h-full" source={require("../../assets/images/istockphoto-1190330112-612x612.jpg")} />
             <View className="m-3">
                 <View className="flex-1">
-                    <Text className="text-lg font-semibold">{name}</Text>
-                    <Text className="text-gray-500 text-lg">{10}€</Text>
+                    <Text className="text-lg font-semibold">{menu.name}</Text>
+                    <Text className="text-gray-500 text-lg">{menu.price} €</Text>
                 </View>
                 <View className="flex-row items-center">
                     <TouchableOpacity 
