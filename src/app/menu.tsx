@@ -6,9 +6,10 @@ import { IFloor, ITab } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
+import { Commands } from "../types/enum";
 
 export default function Menus() {
-  const [categories, setCategories] = useState<ITab[]>([{id: 1, name: "Starter"}, {id: 2, name: "Main Course"}, {id: 3, name: "Pasta"}, {id: 4, name: "Soup"}, {id: 5, name: "dessert"}]);
+  const [categories, setCategories] = useState<ITab[]>([{id: 1, name: "Starter"}, {id: 2, name: "Main Course"}, {id: 3, name: "Pasta"}, {id: 4, name: "Soup"}, {id: 5, name: "Dessert"}]);
   const [categorySelected, setCategorySelected] = useState<ITab>({id: 2, name: "Main Course"});
   const [menus, setMenus] = useState<string[]>(["Beef fillet", "Penne mediterranean", "Sea food mix", "Grilled Salmon", "Beef fillet", "Hamburger", "Pizza"]);
 
@@ -26,16 +27,16 @@ export default function Menus() {
       setMenus(menus);
     });
 
-    //ws.send(Commands.Menus, 1, new Uint8Array(1));
-
+    ws.send(Commands.Menus, 1, new Uint8Array(1));
+    
     return () => {
       ws.eventListener.removeEvent("Menus");
     };
   }, [ws]);
 
   return (
-    <View>
-      <View className="bg-white pt-5 pb-3">
+    <View className="bg-white">
+      <View className="pt-5 pb-3">
         {categories && categorySelected && <Tabbar 
                 items={categories} 
                 tabSelected={categorySelected}

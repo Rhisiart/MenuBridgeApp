@@ -11,7 +11,7 @@ const Floor: FC<IProps> = ({floor}) => {
     return (
         <View className="flex-row flex-wrap justify-center">
         {floor.tables.map((table, idx) => 
-            <Table key={`${idx}`} table={table}/>
+            <Table key={`${idx}`} table={table} floorId={floor.id} />
         )}
         </View>
     )

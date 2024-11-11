@@ -5,12 +5,18 @@ import Svg, { Rect, Text as SvgText } from 'react-native-svg';
 import { ITable } from "../types/interface";
 
 interface IProps {
-    table: ITable
+    table: ITable,
+    floorId: number
 }
 
-const Table: FC<IProps> = ({table}) => {
+const Table: FC<IProps> = ({table, floorId}) => {
     return (
-        <Link href="/menus" asChild> 
+        <Link href={{
+            pathname: "/menu",
+            params: { 
+                floorId: floorId, 
+                tableId: table.id
+        }}} asChild> 
             <Pressable>
             {table.capacity === 4 ? (
                 <Svg width="120" height="100">
