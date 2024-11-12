@@ -5,7 +5,8 @@ import { useWebSocket } from "@/src/context/useWebSocket";
 import { ICategory, IMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
-import { Button, FlatList, Modal, Pressable, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
+import Modal from "../components/modal";
 import { Commands } from "../types/enum";
 
 export default function Menus() {
@@ -52,16 +53,7 @@ export default function Menus() {
       </View>
       <Divider hasShadow />
       <View>
-        <Modal
-          transparent 
-          visible={modalVisible}
-          animationType="slide"
-        >
-          <View className="h-4/6 w-full bottom-0 absolute border-t bg-red-900 rounded-t-[20px]">
-            <Text>Modal</Text>
-            <Button title="hide" onPress={() => setModalVisible(visible => !visible)}/>
-          </View>
-        </Modal>
+        <Modal visible={modalVisible} onClose={() => setModalVisible(visible => !visible)}/>
         <View>
         {categorySelected && <FlatList 
                   data={categorySelected.menus}
