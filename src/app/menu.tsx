@@ -5,14 +5,15 @@ import { useWebSocket } from "@/src/context/useWebSocket";
 import { ICategory, IMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, Modal, Pressable, Text, View } from "react-native";
 import { Commands } from "../types/enum";
 
 export default function Menus() {
   const [categories, setCategories] = useState<ICategory[]>();
   const [categorySelected, setCategorySelected] = useState<ICategory>();
   const [menus, setMenus] = useState<IMenu[]>();
-
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  
   const ws = useWebSocket();
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function Menus() {
   }, [ws]);
 
   return (
-    <View className="bg-white">
+    <View>
       <View className="pt-5 pb-3">
         {categories && categorySelected && <Tabbar 
                 items={categories} 
@@ -50,15 +51,37 @@ export default function Menus() {
         }
       </View>
       <Divider hasShadow />
-      {categorySelected && <FlatList 
-                data={categorySelected.menus}
-                keyExtractor={item => `${item.id}_${item.name}`}
-                renderItem={(item) => <Menu menu={item.item}/>}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 82}}
-                ItemSeparatorComponent={() => <Divider hasShadow={false} />}
-              />
-      }
+      <View>
+        <Modal
+          transparent 
+          visible={modalVisible}
+          animationType="slide"
+          onRequestClose={() => {
+            setModalVisible(visible => !visible);
+          }}
+        >
+          <View className="h-2/4 w-full bg-white">
+            <Text>Modal</Text>
+          </View>
+        </Modal>
+        {categorySelected && <FlatList 
+                  data={categorySelected.menus}
+                  keyExtractor={item => `${item.id}_${item.name}`}
+                  renderItem={(item) => <Menu menu={item.item}/>}
+                  showsVerticalScrollIndicator={false}
+                  ItemSeparatorComponent={() => <Divider hasShadow={false} />}
+                  contentContainerStyle={{ height: "100%", paddingBottom: 82 }}
+                />
+        }
+        <Pressable onPress={() => setModalVisible(visible => !visible)}>
+          <View className="w-11/12 h-16 absolute bottom-52 bg-black rounded-2xl ml-5">
+            <View className="flex-row justify-between p-5">
+              <Text className="text-white">5 items selected</Text>
+              <Text className="text-white">View Order</Text>
+            </View>
+          </View>
+        </Pressable>
+      </View>
     </View>
   );
 }
