@@ -5,7 +5,7 @@ import { useWebSocket } from "@/src/context/useWebSocket";
 import { ICategory, IMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
-import { FlatList, Modal, Pressable, Text, View } from "react-native";
+import { Button, FlatList, Modal, Pressable, Text, View } from "react-native";
 import { Commands } from "../types/enum";
 
 export default function Menus() {
@@ -56,23 +56,23 @@ export default function Menus() {
           transparent 
           visible={modalVisible}
           animationType="slide"
-          onRequestClose={() => {
-            setModalVisible(visible => !visible);
-          }}
         >
-          <View className="h-2/4 w-full bg-white">
+          <View className="h-4/6 w-full bottom-0 absolute border-t bg-red-900 rounded-t-[20px]">
             <Text>Modal</Text>
+            <Button title="hide" onPress={() => setModalVisible(visible => !visible)}/>
           </View>
         </Modal>
+        <View>
         {categorySelected && <FlatList 
                   data={categorySelected.menus}
                   keyExtractor={item => `${item.id}_${item.name}`}
                   renderItem={(item) => <Menu menu={item.item}/>}
                   showsVerticalScrollIndicator={false}
                   ItemSeparatorComponent={() => <Divider hasShadow={false} />}
-                  contentContainerStyle={{ height: "100%", paddingBottom: 82 }}
+                  contentContainerStyle={{ height: "100%"}}
                 />
         }
+        </View>
         <Pressable onPress={() => setModalVisible(visible => !visible)}>
           <View className="w-11/12 h-16 absolute bottom-52 bg-black rounded-2xl ml-5">
             <View className="flex-row justify-between p-5">
