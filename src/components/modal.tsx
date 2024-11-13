@@ -14,7 +14,7 @@ const Modal: FC<IProps> = ({ visible, onClose }) => {
     const opacity = useSharedValue(0);
     const container = useSharedValue(height);
     const modal = useSharedValue(height);
-    const THRESHOLD = 150;
+    const threshold = height / 3;
     const pan = Gesture.Pan()
         .onUpdate((event) => {
             if (event.translationY > 0) {
@@ -22,7 +22,7 @@ const Modal: FC<IProps> = ({ visible, onClose }) => {
             }
         })
         .onEnd((event) => {
-            if (event.translationY > THRESHOLD) {
+            if (event.translationY > threshold) {
                 runOnJS(onClose)();
             } else {
                 modal.value = withSpring(0, {
@@ -54,13 +54,13 @@ const Modal: FC<IProps> = ({ visible, onClose }) => {
 
     const closeModal = () => {
         //need to be in sequence
-        container.value = withTiming(height, { duration: 100, reduceMotion: ReduceMotion.System });
-        opacity.value = withTiming(0, { duration: 300, reduceMotion: ReduceMotion.System });
         modal.value = withSpring(height, {
             damping: 20,
             stiffness: 100,
             reduceMotion: ReduceMotion.System
         });
+        opacity.value = withTiming(0, { duration: 300, reduceMotion: ReduceMotion.System });
+        container.value = withTiming(height, { duration: 100, reduceMotion: ReduceMotion.System });
     }
 
     useEffect(() => {
@@ -111,15 +111,6 @@ const styles = StyleSheet.create({
     text: {
         marginTop: 50,
         textAlign: 'center'
-    },
-    btn: {
-        width: '100%',
-        height: 50,
-        borderRadius: 10,
-        backgroundColor: '#9b59b6',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 30
     }
 })
 
