@@ -5,7 +5,7 @@ import { Tabs } from "expo-router";
 export default function TabLayout() {
   return (
     <Tabs
-      sceneContainerStyle={{backgroundColor: "#fff"}}
+      //sceneContainerStyle={{backgroundColor: "#fff"}}
       screenOptions={{
         headerTitleAlign: "center",
         headerShadowVisible: false,

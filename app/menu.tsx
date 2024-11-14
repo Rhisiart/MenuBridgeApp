@@ -1,13 +1,14 @@
 import Divider from "@/src/components/divider";
 import Menu from "@/src/components/menu";
+import Modal from "@/src/components/modal";
 import Tabbar from "@/src/components/tabbar";
 import { useWebSocket } from "@/src/context/useWebSocket";
+import { Commands } from "@/src/types/enum";
 import { ICategory, IMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
-import Modal from "../components/modal";
-import { Commands } from "../types/enum";
+
 
 export default function Menus() {
   const [categories, setCategories] = useState<ICategory[]>();

@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import "../styles/global.css";
+import "../src/styles/global.css";
 
 export default function RootLayout() {
   return (
@@ -21,8 +21,7 @@ export default function RootLayout() {
                 name="(tabs)"
                 options={{
                   headerShown: false,
-                  animation: "ios",
-                  
+                  animation: "fade",
                 }}
               />
             </Stack>
