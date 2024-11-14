@@ -3,8 +3,25 @@ class Parser {
     readonly VERSION = 1;
     readonly HEADER_SIZE = 5;
     
-    constructor() {
+    constructor() {}
 
+    encodeToUintArray<T>(data: T): Uint8Array {
+        if (typeof data === "string") {
+            return new TextEncoder().encode(data);
+        } else if (typeof data === "number") {
+            const buffer = new ArrayBuffer(8);
+            new DataView(buffer).setFloat64(0, data);
+
+            return new Uint8Array(buffer);
+        } else if (data instanceof ArrayBuffer) {
+            return new Uint8Array(data);
+        } else if (data instanceof Uint8Array) {
+            return data;
+        } else if (typeof data === "object") {
+            return new TextEncoder().encode(JSON.stringify(data));
+        }
+    
+        throw new Error("Unsupported data type");
     }
 
     encode (

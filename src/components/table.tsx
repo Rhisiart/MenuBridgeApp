@@ -12,10 +12,10 @@ interface IProps {
 const Table: FC<IProps> = ({table, floorId}) => {
     return (
         <Link href={{
-            pathname: "/menu",
+            pathname: "/table/[id]",
             params: { 
-                floorId: floorId, 
-                tableId: table.id
+                id: table.id,
+                floorId: floorId
         }}} asChild> 
             <Pressable>
             {table.capacity === 4 ? (

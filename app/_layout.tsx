@@ -21,7 +21,14 @@ export default function RootLayout() {
                 name="(tabs)"
                 options={{
                   headerShown: false,
-                  animation: "fade",
+                  animation: "default",
+                }}
+              />
+              <Stack.Screen 
+                name="table/[id]"
+                options={{
+                  title:"Manage order",
+                  animation: "default",
                 }}
               />
             </Stack>

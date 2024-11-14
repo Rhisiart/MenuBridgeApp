@@ -21,7 +21,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="floors"
+        name="floor"
         options={{
           title: "Select table",
           tabBarIcon: ({ color }) => (

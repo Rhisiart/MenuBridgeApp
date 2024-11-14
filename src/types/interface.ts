@@ -29,3 +29,16 @@ export interface IMenu extends ITab {
 export interface ICategory extends ITab {
   menus: IMenu[],
 }
+
+export interface IOrder {
+  tableId: number,
+  amount: number,
+  statuscode: string,
+}
+
+export interface IOrderItem {
+  orderId: number,
+  menuId: number,
+  quantity: number,
+  price: number
+}
