@@ -1,14 +1,15 @@
-import { FC, useReducer } from "react";
+import { FC, useEffect, useReducer } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { IMenu } from "../types/interface";
+import { IMenu, IOrderItem } from "../types/interface";
 
 type action = "increment" | "decrement";
 
 interface IProps {
     menu: IMenu,
+    onChangeMenuQuantity: (menuId: number, orderItem: IOrderItem) => void
 }
 
-const Menu: FC<IProps> = ({menu}) => {
+const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
     const reducer = (state: number, action: action) => {
         switch (action) {
             case "increment":
@@ -20,7 +21,23 @@ const Menu: FC<IProps> = ({menu}) => {
         }
     }
 
-    const [state, dispach] = useReducer(reducer, 0);
+    const [quantity, dispach] = useReducer(
+        reducer, 
+        menu.orderItem ? menu.orderItem.quantity : 0
+    );
+
+    useEffect(() => {
+        if(quantity <= 0 && !menu.orderItem) {
+            return;
+        }
+
+        onChangeMenuQuantity(
+            menu.id, {
+            ...menu.orderItem, 
+            price: quantity * menu.price, 
+            quantity: quantity,
+        });
+    }, [quantity])
 
     return (
         <View className="h-40 flex-row items-center p-2 border-b border-gray-200">
@@ -38,7 +55,7 @@ const Menu: FC<IProps> = ({menu}) => {
                     >
                         <Text className="text-4xl text-black">-</Text>
                     </TouchableOpacity>
-                    <Text className="px-4 text-lg font-bold">{state}</Text>
+                    <Text className="px-4 text-lg font-bold">{quantity}</Text>
                     <TouchableOpacity 
                         className="w-10 h-10 bg-gray-100 
                         rounded-xl justify-center items-center"

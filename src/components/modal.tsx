@@ -42,7 +42,7 @@ const Modal: FC<IProps> = ({ visible, onClose }) => {
     }));
 
     const openModal = () => {
-        //need to be in sequence
+        //???need to be in sequence
         container.value = withTiming(0, { duration: 100, reduceMotion: ReduceMotion.System });
         opacity.value = withTiming(1, { duration: 300, reduceMotion: ReduceMotion.System });
         modal.value = withSpring(0, {
@@ -53,7 +53,7 @@ const Modal: FC<IProps> = ({ visible, onClose }) => {
     }
 
     const closeModal = () => {
-        //need to be in sequence
+        //???need to be in sequence
         modal.value = withSpring(height, {
             damping: 20,
             stiffness: 100,

@@ -19,11 +19,13 @@ export interface ITable {
   id: number,
   number: number,
 	capacity: number,
+  order: IOrder
 }
 
 export interface IMenu extends ITab {
   description: string,
   price: number,
+  orderItem?: IOrderItem
 }
 
 export interface ICategory extends ITab {
@@ -31,14 +33,11 @@ export interface ICategory extends ITab {
 }
 
 export interface IOrder {
-  tableId: number,
-  amount: number,
-  statuscode: string,
+  id: number,
 }
 
 export interface IOrderItem {
-  orderId: number,
-  menuId: number,
+  id?: number,
   quantity: number,
-  price: number
+  price: number,
 }
