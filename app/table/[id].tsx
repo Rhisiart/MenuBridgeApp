@@ -1,6 +1,7 @@
 import Divider from "@/src/components/divider";
 import Menu from "@/src/components/menu";
 import Modal from "@/src/components/modal";
+import SwipeableRow from "@/src/components/swipeableRow";
 import Tabbar from "@/src/components/tabbar";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
@@ -33,8 +34,8 @@ export default function Table() {
 
   buffer[0] = Number(order);
 
-  const onChangeMenuQuantity = (menuId: number, orderItem: IOrderItem) => {
-    setOrderItems(orderItems => ({...orderItems, [menuId]: orderItem}));
+  const onChangeMenuQuantity = (menuName: string, orderItem: IOrderItem) => {
+    setOrderItems(orderItems => ({...orderItems, [menuName]: orderItem}));
   }
 
   useEffect(() => {
@@ -77,7 +78,22 @@ export default function Table() {
       </View>
       <Divider hasShadow />
       <View>
-        <Modal visible={modalVisible} onClose={() => setModalVisible(visible => !visible)} />
+        <Modal 
+          visible={modalVisible} 
+          onClose={() => setModalVisible(visible => !visible)}
+        >
+            {orderItems && Object.keys(orderItems).length > 0 ?  
+              <FlatList
+                data={Object.entries(orderItems)}
+                keyExtractor={item => item[0]}
+                renderItem={item => <SwipeableRow menuId={item.item[0]} orderItem={item.item[1]} />}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => <Divider hasShadow={false} />}
+              />
+              :
+              <Text>No Menus choosed</Text>
+            }
+        </Modal>
         <View>
           {categorySelected && <FlatList
             data={categorySelected.menus}

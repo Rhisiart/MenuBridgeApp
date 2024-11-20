@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { FC, ReactNode, useEffect } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { ReduceMotion, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 
@@ -7,10 +7,11 @@ const { height } = Dimensions.get('window')
 
 interface IProps {
     visible: boolean,
+    children: ReactNode,
     onClose: () => void,
 }
 
-const Modal: FC<IProps> = ({ visible, onClose }) => {
+const Modal: FC<IProps> = ({ visible, children, onClose }) => {
     const opacity = useSharedValue(0);
     const container = useSharedValue(height);
     const modal = useSharedValue(height);
@@ -72,9 +73,7 @@ const Modal: FC<IProps> = ({ visible, onClose }) => {
             <Animated.View style={[styles.container, containerStyle]}>
                 <Animated.View style={[styles.modal, modalStyle]}>
                     <View style={styles.indicator} />
-                    <Text style={styles.text}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae massa odio. Quisque ante sem, tempor eget massa vel, mollis tincidunt metus. Ut sed felis lectus. Nam semper molestie urna, quis ultricies quam semper ut. Maecenas aliquet id urna a convallis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas leo lectus, dictum vitae erat eget, luctus dapibus sapien. Integer at hendrerit quam. Vivamus tempor, arcu non fringilla laoreet, enim nibh porttitor enim, eget pellentesque eros nulla congue neque. Suspendisse et lobortis enim, nec fermentum est. Aliquam accumsan viverra vehicula. Proin tempus sagittis auctor. Vivamus quam ligula, laoreet eget eros et, hendrerit iaculis risus. Nam a nulla in purus fermentum rhoncus eu et erat. Aliquam tempus felis lorem, id hendrerit tortor vestibulum ac.
-                    </Text>
+                    <View className="w-full mt-10">{children}</View>
                 </Animated.View>
             </Animated.View>
         </GestureDetector>
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         position: 'absolute',
-        zIndex: 2
+        zIndex: 1
     },
     modal: {
         bottom: 0,
@@ -97,8 +96,6 @@ const styles = StyleSheet.create({
         width: '100%',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        paddingLeft: 25,
-        paddingRight: 25
     },
     indicator: {
         width: 40,
@@ -108,10 +105,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 5
     },
-    text: {
-        marginTop: 50,
-        textAlign: 'center'
-    }
 })
 
 export default Modal

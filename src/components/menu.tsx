@@ -6,7 +6,7 @@ type action = "increment" | "decrement";
 
 interface IProps {
     menu: IMenu,
-    onChangeMenuQuantity: (menuId: number, orderItem: IOrderItem) => void
+    onChangeMenuQuantity: (menuName: string, orderItem: IOrderItem) => void
 }
 
 const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
@@ -32,7 +32,7 @@ const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
         }
 
         onChangeMenuQuantity(
-            menu.id, {
+            menu.name, {
             ...menu.orderItem, 
             price: quantity * menu.price, 
             quantity: quantity,
@@ -45,11 +45,11 @@ const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
             <View className="m-3">
                 <View className="flex-1">
                     <Text className="text-lg font-semibold">{menu.name}</Text>
-                    <Text className="text-gray-500 text-lg">{menu.price} €</Text>
+                    <Text className="text-gray-400 text-lg">{menu.price} €</Text>
                 </View>
                 <View className="flex-row items-center">
                     <TouchableOpacity 
-                        className="w-10 h-10 bg-gray-100 
+                        className="w-10 h-10 bg-stone-200 
                         rounded-xl justify-center items-center"
                         onPress={() => dispach("decrement")}
                     >
@@ -57,7 +57,7 @@ const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
                     </TouchableOpacity>
                     <Text className="px-4 text-lg font-bold">{quantity}</Text>
                     <TouchableOpacity 
-                        className="w-10 h-10 bg-gray-100 
+                        className="w-10 h-10 bg-stone-200 
                         rounded-xl justify-center items-center"
                         onPress={() => dispach("increment")}
                     >
