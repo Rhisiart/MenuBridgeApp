@@ -1,3 +1,4 @@
+import Button from "@/src/components/button";
 import Divider from "@/src/components/divider";
 import Menu from "@/src/components/menu";
 import Modal from "@/src/components/modal";
@@ -9,7 +10,7 @@ import { ICategory, IOrderItem } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 
 type params = {
   id: string,
@@ -36,6 +37,10 @@ export default function Table() {
 
   const onChangeMenuQuantity = (menuName: string, orderItem: IOrderItem) => {
     setOrderItems(orderItems => ({...orderItems, [menuName]: orderItem}));
+  }
+
+  const onPressButton = () => {
+    setModalVisible(visible => !visible);
   }
 
   useEffect(() => {
@@ -105,14 +110,10 @@ export default function Table() {
           />
           }
         </View>
-        <Pressable onPress={() => setModalVisible(visible => !visible)}>
-          <View className="w-11/12 h-16 absolute bottom-52 bg-black rounded-2xl ml-5">
-            <View className="flex-row justify-between p-5">
-              <Text className="text-white">{totalItems} items selected</Text>
-              <Text className="text-white">View Order</Text>
-            </View>
-          </View>
-        </Pressable>
+        <Button onPress={onPressButton}>
+            <Text className="text-white">{totalItems} items selected</Text>
+            <Text className="text-white">View Order</Text>
+        </Button>
       </View>
     </View>
   );

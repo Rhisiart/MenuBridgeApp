@@ -2,6 +2,7 @@ import { FC, ReactNode, useEffect } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { ReduceMotion, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import { Portal } from "./portal";
 
 const { height } = Dimensions.get('window')
 
@@ -44,12 +45,13 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
 
     const openModal = () => {
         //???need to be in sequence
-        container.value = withTiming(0, { duration: 100, reduceMotion: ReduceMotion.System });
-        opacity.value = withTiming(1, { duration: 300, reduceMotion: ReduceMotion.System });
-        modal.value = withSpring(0, {
-            damping: 20,
-            stiffness: 100,
-            reduceMotion: ReduceMotion.System
+        container.value = withTiming(0, { duration: 100, reduceMotion: ReduceMotion.System }, () => {
+            opacity.value = withTiming(1, { duration: 300, reduceMotion: ReduceMotion.System });
+            modal.value = withSpring(0, {
+                damping: 20,
+                stiffness: 100,
+                reduceMotion: ReduceMotion.System
+            });
         });
     }
 
@@ -69,14 +71,16 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
     }, [visible])
 
     return (
-        <GestureDetector gesture={pan}>
-            <Animated.View style={[styles.container, containerStyle]}>
-                <Animated.View style={[styles.modal, modalStyle]}>
-                    <View style={styles.indicator} />
-                    <View className="w-full mt-10">{children}</View>
+        <Portal id="model">
+            <GestureDetector gesture={pan}>
+                <Animated.View style={[styles.container, containerStyle]}>
+                    <Animated.View style={[styles.modal, modalStyle]}>
+                        <View style={styles.indicator} />
+                        <View className="w-full mt-10">{children}</View>
+                    </Animated.View>
                 </Animated.View>
-            </Animated.View>
-        </GestureDetector>
+            </GestureDetector>
+        </Portal>
     )
 }
 
@@ -91,7 +95,7 @@ const styles = StyleSheet.create({
     modal: {
         bottom: 0,
         position: 'absolute',
-        height: '92%',
+        height: '76%',
         backgroundColor: '#fff',
         width: '100%',
         borderTopLeftRadius: 20,
