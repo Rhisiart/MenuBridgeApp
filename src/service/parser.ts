@@ -45,7 +45,7 @@ class Parser {
     }
     
     decode (buffer: Uint8Array) {
-                        if (buffer.length < this.HEADER_SIZE) {
+        if (buffer.length < this.HEADER_SIZE) {
             throw new Error("Buffer too small to be a valid packet");
         }
 

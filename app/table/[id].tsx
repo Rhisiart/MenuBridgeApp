@@ -8,7 +8,7 @@ import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
 import { ICategory, IOrderItem } from "@/src/types/interface";
 import { Buffer } from "buffer";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
@@ -30,13 +30,28 @@ export default function Table() {
   const [totalItems, setTotalItems] = useState<number>(0);
 
   const ws = useWebSocket();
-  const { id, order, floor} = useLocalSearchParams<params>();
+  const router = useRouter();
+  const { id, order, floor } = useLocalSearchParams<params>();
   const buffer = new Uint8Array(1);
 
   buffer[0] = Number(order);
 
   const onChangeMenuQuantity = (menuName: string, orderItem: IOrderItem) => {
-    setOrderItems(orderItems => ({...orderItems, [menuName]: orderItem}));
+    setOrderItems(orderItems => ({ ...orderItems, [menuName]: orderItem }));
+  }
+
+  const onPressSendButton = () => {
+    if (!ws || !orderItems) {
+      return;
+    }
+
+    const sendOrder = {id: Number(order), orderItems: Object.values(orderItems)}
+    const orderStringify = JSON.stringify(sendOrder);
+    const buf = Buffer.alloc(Buffer.byteLength(orderStringify));
+    const len = buf.write(orderStringify);
+
+    ws.send(Commands.Place, 1, buf);  
+    router.replace("/floor");
   }
 
   const onPressButton = () => {
@@ -67,10 +82,6 @@ export default function Table() {
     };
   }, [ws]);
 
-  useEffect(() => {
-    console.log(orderItems);
-  }, [orderItems]);
-
   return (
     <View>
       <View className="pt-5 pb-3">
@@ -83,36 +94,44 @@ export default function Table() {
       </View>
       <Divider hasShadow />
       <View>
-        <Modal 
-          visible={modalVisible} 
+        <Modal
+          visible={modalVisible}
           onClose={() => setModalVisible(visible => !visible)}
         >
-            {orderItems && Object.keys(orderItems).length > 0 ?  
+          {orderItems && Object.keys(orderItems).length > 0 ?
+            <View>
               <FlatList
                 data={Object.entries(orderItems)}
                 keyExtractor={item => item[0]}
                 renderItem={item => <SwipeableRow menuId={item.item[0]} orderItem={item.item[1]} />}
                 showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={() => <Divider hasShadow={false} />}
+                ItemSeparatorComponent={() => <Divider hasShadow={false}/>}
+                contentContainerStyle={{ height: "100%" }}
               />
-              :
-              <Text>No Menus choosed</Text>
-            }
+              <Button elememt="modal" onPress={onPressSendButton}>
+                <Text className="text-white text-center p-5">Send order</Text>
+              </Button>
+            </View>
+            :
+            <Text>No Menus choosed</Text>
+          }
         </Modal>
         <View>
           {categorySelected && <FlatList
             data={categorySelected.menus}
             keyExtractor={item => `${item.id}_${item.name}`}
-            renderItem={(item) => <Menu menu={item.item} onChangeMenuQuantity={onChangeMenuQuantity}/>}
+            renderItem={(item) => <Menu menu={item.item} onChangeMenuQuantity={onChangeMenuQuantity} />}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <Divider hasShadow={false} />}
             contentContainerStyle={{ height: "100%" }}
           />
           }
         </View>
-        <Button onPress={onPressButton}>
+        <Button elememt="screen" onPress={onPressButton}>
+          <View className="flex-row justify-between p-5">
             <Text className="text-white">{totalItems} items selected</Text>
             <Text className="text-white">View Order</Text>
+          </View>
         </Button>
       </View>
     </View>

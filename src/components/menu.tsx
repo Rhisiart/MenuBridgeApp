@@ -9,7 +9,7 @@ interface IProps {
     onChangeMenuQuantity: (menuName: string, orderItem: IOrderItem) => void
 }
 
-const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
+const Menu: FC<IProps> = ({ menu, onChangeMenuQuantity }) => {
     const reducer = (state: number, action: action) => {
         switch (action) {
             case "increment":
@@ -22,19 +22,19 @@ const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
     }
 
     const [quantity, dispach] = useReducer(
-        reducer, 
+        reducer,
         menu.orderItem ? menu.orderItem.quantity : 0
     );
 
     useEffect(() => {
-        if(quantity <= 0 && !menu.orderItem) {
+        if (quantity <= 0 && !menu.orderItem) {
             return;
         }
 
         onChangeMenuQuantity(
             menu.name, {
-            ...menu.orderItem, 
-            price: quantity * menu.price, 
+            ...menu.orderItem,
+            price: quantity * menu.price,
             quantity: quantity,
         });
     }, [quantity])
@@ -48,7 +48,7 @@ const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
                     <Text className="text-gray-400 text-lg">{menu.price} €</Text>
                 </View>
                 <View className="flex-row items-center">
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         className="w-10 h-10 bg-stone-200 
                         rounded-xl justify-center items-center"
                         onPress={() => dispach("decrement")}
@@ -56,7 +56,7 @@ const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
                         <Text className="text-4xl text-black">-</Text>
                     </TouchableOpacity>
                     <Text className="px-4 text-lg font-bold">{quantity}</Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         className="w-10 h-10 bg-stone-200 
                         rounded-xl justify-center items-center"
                         onPress={() => dispach("increment")}
@@ -68,7 +68,7 @@ const Menu: FC<IProps> = ({menu, onChangeMenuQuantity}) => {
             <TouchableOpacity>
                 <Text className="text-gray-400 text-lg">›</Text>
             </TouchableOpacity>
-    </View>
+        </View>
     )
 }
 

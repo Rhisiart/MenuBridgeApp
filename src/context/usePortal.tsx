@@ -37,12 +37,12 @@ const PortalProvider: React.FC<IProps> = ({children}) => {
         <PortalContext.Provider value={{ render, remove }}>
             {children}
             <View style={styles.container} pointerEvents="box-none">
-            {Object.values(elements).map((element, index) => (
-                <View key={index} style={StyleSheet.absoluteFill}>
-                    {element}
-                </View>
-            ))}
-        </View>
+                {Object.values(elements).map((element, index) => (
+                    <View key={index} style={StyleSheet.absoluteFill}>
+                        {element}
+                    </View>
+                ))}
+            </View>
         </PortalContext.Provider>
     );
 }

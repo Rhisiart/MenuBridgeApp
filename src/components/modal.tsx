@@ -17,6 +17,9 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
     const container = useSharedValue(height);
     const modal = useSharedValue(height);
     const threshold = height / 3;
+    const tap = Gesture.Tap().onEnd((event) => {
+        runOnJS(onClose)();
+    })
     const pan = Gesture.Pan()
         .onUpdate((event) => {
             if (event.translationY > 0) {
