@@ -1,10 +1,10 @@
 import { FC, ReactNode, useEffect } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { ReduceMotion, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Portal } from "./portal";
 
-const { height } = Dimensions.get('window')
+const { height } = Dimensions.get('window');
 
 interface IProps {
     visible: boolean,
@@ -17,9 +17,11 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
     const container = useSharedValue(height);
     const modal = useSharedValue(height);
     const threshold = height / 3;
-    const tap = Gesture.Tap().onEnd((event) => {
+
+    const tap = Gesture.Tap().onEnd(() => {
         runOnJS(onClose)();
-    })
+    });
+
     const pan = Gesture.Pan()
         .onUpdate((event) => {
             if (event.translationY > 0) {
@@ -46,54 +48,60 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
         transform: [{ translateY: modal.value }],
     }));
 
+    const opaqueStyle = useAnimatedStyle(() => ({
+        height: interpolate(modal.value, [0, height], [height, height]),
+        backgroundColor: `rgba(0, 0, 0, 0.5)`,
+    }));
+
     const openModal = () => {
-        //???need to be in sequence
-        container.value = withTiming(0, { duration: 100, reduceMotion: ReduceMotion.System }, () => {
-            opacity.value = withTiming(1, { duration: 300, reduceMotion: ReduceMotion.System });
+        container.value = withTiming(0, { duration: 100 }, () => {
+            opacity.value = withTiming(1, { duration: 300 });
             modal.value = withSpring(0, {
                 damping: 20,
                 stiffness: 100,
-                reduceMotion: ReduceMotion.System
             });
         });
-    }
+    };
 
     const closeModal = () => {
-        //???need to be in sequence
         modal.value = withSpring(height, {
             damping: 20,
             stiffness: 100,
-            reduceMotion: ReduceMotion.System
         });
-        opacity.value = withTiming(0, { duration: 300, reduceMotion: ReduceMotion.System });
-        container.value = withTiming(height, { duration: 100, reduceMotion: ReduceMotion.System });
-    }
+        opacity.value = withTiming(0, { duration: 300 });
+        container.value = withTiming(height, { duration: 100 });
+    };
 
     useEffect(() => {
         visible ? openModal() : closeModal();
-    }, [visible])
+    }, [visible]);
 
     return (
-        <Portal id="model">
-            <GestureDetector gesture={pan}>
-                <Animated.View style={[styles.container, containerStyle]}>
+        <Portal id="modal">
+            <Animated.View style={[styles.container, containerStyle]}>
+                <GestureDetector gesture={tap}>
+                    <Animated.View style={[styles.opaqueContainer, opaqueStyle]} />
+                </GestureDetector>
+                <GestureDetector gesture={pan}>
                     <Animated.View style={[styles.modal, modalStyle]}>
                         <View style={styles.indicator} />
                         <View className="w-full mt-10">{children}</View>
                     </Animated.View>
-                </Animated.View>
-            </GestureDetector>
+                </GestureDetector>
+            </Animated.View>
         </Portal>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         position: 'absolute',
-        zIndex: 1
+        zIndex: 1,
+    },
+    opaqueContainer: {
+        width: '100%',
     },
     modal: {
         bottom: 0,
@@ -110,8 +118,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ccc',
         borderRadius: 50,
         alignSelf: 'center',
-        marginTop: 5
+        marginTop: 5,
     },
-})
+});
 
-export default Modal
+export default Modal;
