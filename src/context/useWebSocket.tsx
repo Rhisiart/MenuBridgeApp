@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 interface IProps {
     url: string,
-    children: React.ReactNode
+    children: React.ReactNode,
 }
 
 const WebSocketContext = createContext<Manager | undefined>(undefined);
@@ -16,7 +16,7 @@ const WebSocketProvider: React.FC<IProps> = ({ url, children}) => {
         const mngr = Manager.getInstance(url, new Parser());
 
         setManager(mngr);
-    }, [url])
+    }, [url]);
 
     return (
         <WebSocketContext.Provider value={manager}>
@@ -25,5 +25,5 @@ const WebSocketProvider: React.FC<IProps> = ({ url, children}) => {
     )
 }
 
-export const useWebSocket = () => useContext(WebSocketContext)
+export const useWebSocket = () => useContext(WebSocketContext);
 export default WebSocketProvider;

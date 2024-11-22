@@ -2,15 +2,15 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 interface IProps {
-    children: React.ReactNode
+    children: React.ReactNode,
 }
 interface IPortalContext {
-    render: (key: string, element: ReactNode) => void;
-    remove: (key: string) => void;
+    render: (key: string, element: ReactNode) => void,
+    remove: (key: string) => void,
 }
 
 interface IElement {
-    [key: string]: ReactNode
+    [key: string]: ReactNode,
 }
 
 const PortalContext = createContext<IPortalContext>({
@@ -59,5 +59,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export const usePortal = () => useContext(PortalContext)
+export const usePortal = () => useContext(PortalContext);
 export default PortalProvider;

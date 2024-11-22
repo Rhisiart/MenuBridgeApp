@@ -6,8 +6,10 @@ import { Portal } from "./portal";
 
 const { height } = Dimensions.get('window');
 
+type position = "vertical" | "horizontal";
 interface IProps {
     visible: boolean,
+    position: position,
     children: ReactNode,
     onClose: () => void,
 }

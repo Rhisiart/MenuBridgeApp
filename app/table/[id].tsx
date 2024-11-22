@@ -95,6 +95,7 @@ export default function Table() {
       <Divider hasShadow />
       <View>
         <Modal
+          position="horizontal"
           visible={modalVisible}
           onClose={() => setModalVisible(visible => !visible)}
         >
