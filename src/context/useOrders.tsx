@@ -1,6 +1,5 @@
 import { Buffer } from "buffer";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Commands } from "../types/enum";
 import { IOrder } from "../types/interface";
 import { useWebSocket } from "./useWebSocket";
 
@@ -27,7 +26,7 @@ const OrdersProvider: React.FC<IProps> = ({children}) => {
             setOrders(ordersParsed);
         });
 
-        ws.send(Commands.Order, 1, new Uint8Array(1));
+        //ws.send(Commands.Order, 1, new Uint8Array(1));
 
         return () => {
             ws.eventListener.removeEvent("Order");

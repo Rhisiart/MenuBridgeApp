@@ -17,7 +17,7 @@ const Header: FC<IProps> = ({title, hasDivider}) => {
     const orders = useOrders();
 
     const onCloseModel = () => {
-        setShowOrders(show => !show)
+        setShowOrders(show => !show);
     }
 
     return (
@@ -29,15 +29,14 @@ const Header: FC<IProps> = ({title, hasDivider}) => {
                     <FontAwesome5 name="calendar-alt" size={24} color="black" />
                 </TouchableOpacity>
             </View>
-            <Modal 
-                position='vertical'
+           <Modal 
+                position="vertical"
                 visible={showOrders} 
                 onClose={onCloseModel}
             >
-                {orders.length > 0 ? 
-                    <OrdersList orders={orders}/>
-                    :
-                    <Text>Not orders for today yet!</Text>
+                {orders.length > 0 
+                    ? <OrdersList orders={orders}/>
+                    : <Text>Not orders for today yet!</Text>
                 }
             </Modal>
         </View>
