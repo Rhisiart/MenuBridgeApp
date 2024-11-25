@@ -4,24 +4,26 @@ import Parser from "./parser";
 
 class Manager {
     private static instance: Manager;
+    private queue: Uint8Array[];
     private ws: WebSocket;
     private url: string;
     private parser: Parser;
     public eventListener: EventListener;
 
-    private constructor(url: string, parser: Parser) {
-        this.parser = parser;
+    private constructor(url: string) {
+        this.parser = new Parser();
         this.url = url;
         this.eventListener = new EventListener();
         this.ws = this.connect();
+        this.queue = [];
     }
 
-    public static getInstance(url: string, parser: Parser) {
+    public static getInstance(url: string) {
         if(Manager.instance) {
             return Manager.instance;
         }
 
-        return new Manager(url, parser);
+        return new Manager(url);
     }
 
     private connect() {
@@ -34,7 +36,11 @@ class Manager {
             const data = new TextEncoder().encode("Hello World");
             const buf = this.parser.encode(0, 1, data);
 
-            ws.send(buf);
+            this.queue.push(buf);
+
+            this.queue.map(msg => {
+                ws.send(msg);
+            });
         };
 
         ws.onmessage = (event: MessageEvent<ArrayBuffer>) => {
@@ -60,8 +66,15 @@ class Manager {
         sequence: number,
         data: Uint8Array
     ) {
-        console.log("sending the request");
-        this.ws.send(this.parser.encode(cmd, sequence, data));
+        const msgEncoded = this.parser.encode(cmd, sequence, data);
+
+        if(this.ws.readyState === this.ws.OPEN) {
+            this.ws.send(msgEncoded);
+        } else {
+            console.log("The connection still to be establish...");
+            
+            this.queue.push(msgEncoded);
+        }
     }
 }
 

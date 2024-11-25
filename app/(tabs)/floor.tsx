@@ -39,7 +39,7 @@ export default function Floors() {
             ws.eventListener.removeEvent("Floors");
         };
 
-    }, [])
+    }, [ws])
 
     return (
         <View>

@@ -10,12 +10,12 @@ import "../src/styles/global.css";
 
 export default function RootLayout() {
   return (
-    <SafeAreaProvider>
-      <SafeAreaView className="flex-1 font-roboto">
-        <GestureHandlerRootView>
-          <PortalProvider>
-            <WebSocketProvider url={`ws://${process.env.EXPO_PUBLIC_IP}:8080/ws`}>
-              <OrdersProvider>
+    <WebSocketProvider url={`ws://${process.env.EXPO_PUBLIC_IP}:8080/ws`}>
+      <SafeAreaProvider>
+        <SafeAreaView className="flex-1 font-roboto">
+          <GestureHandlerRootView>
+            <OrdersProvider>
+              <PortalProvider>
                 <Stack
                   screenOptions={{
                     contentStyle: { backgroundColor: '#fff' },
@@ -36,11 +36,12 @@ export default function RootLayout() {
                     }}
                   />
                 </Stack>
-              </OrdersProvider>
-            </WebSocketProvider>
-          </PortalProvider>
-        </GestureHandlerRootView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+
+              </PortalProvider>
+            </OrdersProvider>
+          </GestureHandlerRootView>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </WebSocketProvider>
   );
 }

@@ -20,11 +20,11 @@ interface IProps {
 
 const Modal: FC<IProps> = ({ id, position, visible, children, onClose }) => {
     const sharedValue = position === "horizontal" ? height : width;
+    const threshold = sharedValue / 3;
 
     const opacity = useSharedValue(0);
     const container = useSharedValue(sharedValue);
     const modal = useSharedValue(sharedValue);
-    const threshold = sharedValue / 3;
 
     const tap = Gesture.Tap().onEnd(() => {
         runOnJS(onClose)();
@@ -75,7 +75,7 @@ const Modal: FC<IProps> = ({ id, position, visible, children, onClose }) => {
         height: position === "horizontal" 
                     ?  interpolate(modal.value, [0, height], [height, height])
                     : "100%",
-        backgroundColor: `rgba(0, 0, 0, 0.5)`,
+        backgroundColor: `rgba(0, 0, 0, ${opacity.value * 0.5})`,
     }));
 
     const openModal = () => {
@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         height: '100%',
         width: '76%',
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 0,
         borderBottomLeftRadius: 20,
     },
     indicator: {

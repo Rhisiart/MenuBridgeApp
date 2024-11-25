@@ -1,5 +1,4 @@
 import Manager from "@/src/service/manager";
-import Parser from "@/src/service/parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface IProps {
@@ -13,7 +12,7 @@ const WebSocketProvider: React.FC<IProps> = ({ url, children}) => {
     const [manager, setManager] = useState<Manager>();
 
     useEffect(() => {
-        const mngr = Manager.getInstance(url, new Parser());
+        const mngr = Manager.getInstance(url);
 
         setManager(mngr);
     }, [url]);

@@ -1,15 +1,27 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { Text, View } from "react-native";
-import { IOrder } from "../types/interface";
+import { useOrders } from "../context/useOrders";
+import Order from "./order";
 
 interface IProps {
-    orders: IOrder[]
 }
 
 const OrdersList: FC<IProps> = () => {
+    const orders = useOrders();
+
+   console.log(`orders = ${orders}`);
+
     return (
         <View>
-            <Text>Orders list</Text>
+            <View>
+                <Text>Orders list</Text>
+            </View>
+            <View>
+                {orders && orders.length > 0 
+                    ? orders.map(order => (<Order {...order}/>))
+                    : <Text>Not orders for today yet!</Text>
+                }
+            </View>
         </View>
     )
 } 

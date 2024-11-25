@@ -2,7 +2,6 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { FC, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useOrders } from '../context/useOrders';
 import Modal from './modal';
 import OrdersList from './ordersList';
 
@@ -13,8 +12,6 @@ interface IProps {
 
 const Header: FC<IProps> = ({title, hasDivider}) => {
     const [showOrders, setShowOrders] = useState(false);
-
-    const orders = useOrders();
 
     const onCloseModel = () => {
         setShowOrders(show => !show);
@@ -35,10 +32,7 @@ const Header: FC<IProps> = ({title, hasDivider}) => {
                 visible={showOrders} 
                 onClose={onCloseModel}
             >
-                {orders.length > 0 
-                    ? <OrdersList orders={orders}/>
-                    : <Text>Not orders for today yet!</Text>
-                }
+                <OrdersList />
             </Modal>
         </View>
     )
