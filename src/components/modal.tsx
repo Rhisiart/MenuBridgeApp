@@ -4,21 +4,27 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Portal } from "./portal";
 
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 type position = "vertical" | "horizontal";
+
+
+
 interface IProps {
+    id: string,
     visible: boolean,
     position: position,
     children: ReactNode,
     onClose: () => void,
 }
 
-const Modal: FC<IProps> = ({ visible, children, onClose }) => {
+const Modal: FC<IProps> = ({ id, position, visible, children, onClose }) => {
+    const sharedValue = position === "horizontal" ? height : width;
+
     const opacity = useSharedValue(0);
-    const container = useSharedValue(height);
-    const modal = useSharedValue(height);
-    const threshold = height / 3;
+    const container = useSharedValue(sharedValue);
+    const modal = useSharedValue(sharedValue);
+    const threshold = sharedValue / 3;
 
     const tap = Gesture.Tap().onEnd(() => {
         runOnJS(onClose)();
@@ -26,12 +32,20 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
 
     const pan = Gesture.Pan()
         .onUpdate((event) => {
-            if (event.translationY > 0) {
-                modal.value = event.translationY;
+            const modalValue = position === "horizontal" 
+                ? event.translationY 
+                : event.translationX;
+
+            if (modalValue > 0) {
+                modal.value = modalValue;
             }
         })
         .onEnd((event) => {
-            if (event.translationY > threshold) {
+            const translationValue = position === "horizontal" 
+                ? event.translationY 
+                : event.translationX;
+
+            if (translationValue > threshold) {
                 runOnJS(onClose)();
             } else {
                 modal.value = withSpring(0, {
@@ -43,15 +57,24 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
 
     const containerStyle = useAnimatedStyle(() => ({
         opacity: opacity.value,
-        transform: [{ translateY: container.value }],
+        transform: position === "horizontal" 
+            ? [{ translateY: container.value }] 
+            : [{ translateX: container.value }],
     }));
 
     const modalStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: modal.value }],
+        transform: position === "horizontal" 
+        ? [{ translateY: modal.value }] 
+        : [{ translateX: modal.value }],
     }));
 
-    const opaqueStyle = useAnimatedStyle(() => ({
-        height: interpolate(modal.value, [0, height], [height, height]),
+    const overlayStyle = useAnimatedStyle(() => ({
+        width: position === "horizontal" 
+                ? "100%"
+                : interpolate(modal.value, [0, width], [width, width]),
+        height: position === "horizontal" 
+                    ?  interpolate(modal.value, [0, height], [height, height])
+                    : "100%",
         backgroundColor: `rgba(0, 0, 0, 0.5)`,
     }));
 
@@ -66,12 +89,12 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
     };
 
     const closeModal = () => {
-        modal.value = withSpring(height, {
+        modal.value = withSpring(sharedValue, {
             damping: 20,
             stiffness: 100,
         });
         opacity.value = withTiming(0, { duration: 300 });
-        container.value = withTiming(height, { duration: 100 });
+        container.value = withTiming(sharedValue, { duration: 100 });
     };
 
     useEffect(() => {
@@ -79,13 +102,17 @@ const Modal: FC<IProps> = ({ visible, children, onClose }) => {
     }, [visible]);
 
     return (
-        <Portal id="modal">
+        <Portal id={id}>
             <Animated.View style={[styles.container, containerStyle]}>
                 <GestureDetector gesture={tap}>
-                    <Animated.View style={[styles.opaqueContainer, opaqueStyle]} />
+                    <Animated.View style={[styles.overlayContainer, overlayStyle]} />
                 </GestureDetector>
                 <GestureDetector gesture={pan}>
-                    <Animated.View style={[styles.modal, modalStyle]}>
+                    <Animated.View style={[
+                        styles.modal, 
+                        modalStyle,
+                        position === "vertical" && styles.panel
+                    ]}>
                         <View style={styles.indicator} />
                         <View className="w-full mt-10">{children}</View>
                     </Animated.View>
@@ -102,7 +129,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 1,
     },
-    opaqueContainer: {
+    overlayContainer: {
         width: '100%',
     },
     modal: {
@@ -113,6 +140,15 @@ const styles = StyleSheet.create({
         width: '100%',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+    },
+    panel: {
+        right: 0,
+        bottom: 0,
+        height: '100%',
+        width: '76%',
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
     },
     indicator: {
         width: 40,

@@ -30,6 +30,7 @@ const Header: FC<IProps> = ({title, hasDivider}) => {
                 </TouchableOpacity>
             </View>
            <Modal 
+                id="orders"
                 position="vertical"
                 visible={showOrders} 
                 onClose={onCloseModel}
