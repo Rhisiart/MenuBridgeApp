@@ -43,6 +43,9 @@ export interface IOrder {
 
 export interface IOrderItem {
   id?: number,
+  orderId?: number,
+  menuId?: number,
+  tableId?: number,
   quantity: number,
   price: number,
 }

@@ -15,8 +15,9 @@ const Table: FC<IProps> = ({table, floorId}) => {
             pathname: "/table/[id]",
             params: { 
                 id: table.id,
+                tableNumber: table.number,
                 order: table.order.id,
-                floor: floorId
+                floor: floorId,
         }}} asChild> 
             <Pressable>
             {table.capacity === 4 ? (

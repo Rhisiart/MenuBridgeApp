@@ -27,17 +27,20 @@ const OrdersProvider: React.FC<IProps> = ({children}) => {
             setOrders(ordersParsed);
         });
 
+        ws.eventListener.addEvent("Place", (data: Uint8Array) => {
+            const str = Buffer.from(data).toString("utf-8");
+            const order: IOrder = JSON.parse(str);
+
+            setOrders(orders => ([...orders, order]));
+        });
+
         ws.send(Commands.Order, 1, new Uint8Array(1));
 
         return () => {
             ws.eventListener.removeEvent("Order");
+            ws.eventListener.removeEvent("Place");
         }
     }, [ws]);
-
-    useEffect(() => {
-        console.log("----------------------------------");
-        console.log(orders);
-    }, [orders])
 
     return (
         <OrdersContext.Provider value={orders}>

@@ -9,16 +9,14 @@ interface IProps {
 const OrdersList: FC<IProps> = () => {
     const orders = useOrders();
 
-   console.log(`orders = ${orders}`);
-
     return (
         <View>
-            <View>
-                <Text>Orders list</Text>
+            <View className=" flex justify-between items-center px-4">
+                <Text className="text-xl font-semibold">Orders list</Text>
             </View>
-            <View>
+            <View className="mt-6 ml-8">
                 {orders && orders.length > 0 
-                    ? orders.map(order => (<Order {...order}/>))
+                    ? orders.map(order => (<Order key={order.id} {...order}/>))
                     : <Text>Not orders for today yet!</Text>
                 }
             </View>

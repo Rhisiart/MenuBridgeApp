@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: '100%',
-        width: '76%',
+        width: '85%',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 0,
         borderBottomLeftRadius: 20,

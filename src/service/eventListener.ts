@@ -1,4 +1,6 @@
+import { Commands } from "../types/enum";
 
+type CommandsStrings = keyof typeof Commands;
 class EventListener {
     private listoners: {[key: string]: Function}
 
@@ -6,11 +8,11 @@ class EventListener {
         this.listoners = {};
     }
 
-    addEvent(event: string, callback: Function) {
+    addEvent(event: CommandsStrings, callback: Function) {
         this.listoners[event] = callback;
     }
 
-    removeEvent(event: string) {
+    removeEvent(event: CommandsStrings) {
         if(!this.listoners[event]) {
             return;
         }

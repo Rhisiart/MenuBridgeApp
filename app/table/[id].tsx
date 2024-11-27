@@ -14,6 +14,7 @@ import { FlatList, Text, View } from "react-native";
 
 type params = {
   id: string,
+  tableNumber: string,
   order: string,
   floor: string,
 }
@@ -31,7 +32,7 @@ export default function Table() {
 
   const ws = useWebSocket();
   const router = useRouter();
-  const { id, order, floor } = useLocalSearchParams<params>();
+  const { id, order, floor, tableNumber } = useLocalSearchParams<params>();
   const buffer = new Uint8Array(1);
 
   buffer[0] = Number(order);
@@ -45,7 +46,19 @@ export default function Table() {
       return;
     }
 
-    const sendOrder = {id: Number(order), orderItems: Object.values(orderItems)}
+    const sendOrder = {
+      id: Number(order), 
+      customerId: 1,
+      orderItems: Object.values(orderItems).map((orderItem, idx) => ({
+        ...orderItem, menuId: Number(Object.keys(orderItems)[idx])
+      })),
+      amount: 100,
+      tableNumber: Number(tableNumber),
+      floorId: Number(floor),
+      tableId: Number(id),
+      statuscode: "In Progress",
+    }
+    
     const orderStringify = JSON.stringify(sendOrder);
     const buf = Buffer.alloc(Buffer.byteLength(orderStringify));
     const len = buf.write(orderStringify);

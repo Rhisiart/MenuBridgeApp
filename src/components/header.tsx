@@ -21,7 +21,7 @@ const Header: FC<IProps> = ({title, hasDivider}) => {
         <View className="pt-6 pb-6 bg-white">
             <View className="flex-row justify-between items-center px-4">
                 <MaterialCommunityIcons name="account" size={24} color="black" />
-                <Text className="text-2xl font-bold ">{title}</Text>
+                <Text className="text-xl font-semibold">{title}</Text>
                 <TouchableOpacity onPress={onCloseModel}>
                     <FontAwesome5 name="calendar-alt" size={24} color="black" />
                 </TouchableOpacity>

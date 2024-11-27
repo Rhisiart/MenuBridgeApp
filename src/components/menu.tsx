@@ -32,7 +32,7 @@ const Menu: FC<IProps> = ({ menu, onChangeMenuQuantity }) => {
         }
 
         onChangeMenuQuantity(
-            menu.name, {
+            String(menu.id), {
             ...menu.orderItem,
             price: quantity * menu.price,
             quantity: quantity,
