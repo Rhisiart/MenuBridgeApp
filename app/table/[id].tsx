@@ -6,39 +6,35 @@ import SwipeableRow from "@/src/components/swipeableRow";
 import Tabbar from "@/src/components/tabbar";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
-import { ICategory, IOrderItem } from "@/src/types/interface";
+import { ICategory, IOrderItemMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
-type params = {
+type Params = {
   id: string,
   tableNumber: string,
   order: string,
   floor: string,
 }
 
-type orderItems = {
-  [key: string]: IOrderItem
-}
-
 export default function Table() {
   const [categories, setCategories] = useState<ICategory[]>();
   const [categorySelected, setCategorySelected] = useState<ICategory>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [orderItems, setOrderItems] = useState<orderItems>();
+  const [orderItems, setOrderItems] = useState<Record<string, IOrderItemMenu>>();
   const [totalItems, setTotalItems] = useState<number>(0);
 
   const ws = useWebSocket();
   const router = useRouter();
-  const { id, order, floor, tableNumber } = useLocalSearchParams<params>();
+  const { id, order, floor, tableNumber } = useLocalSearchParams<Params>();
   const buffer = new Uint8Array(1);
 
   buffer[0] = Number(order);
 
-  const onChangeMenuQuantity = (menuName: string, orderItem: IOrderItem) => {
-    setOrderItems(orderItems => ({ ...orderItems, [menuName]: orderItem }));
+  const onChangeMenuQuantity = (menuId: string, orderItem: IOrderItemMenu) => {
+    setOrderItems(orderItems => ({ ...orderItems, [menuId]: orderItem }));
   }
 
   const onPressSendButton = () => {
@@ -57,6 +53,7 @@ export default function Table() {
       floorId: Number(floor),
       tableId: Number(id),
       statuscode: "In Progress",
+      createdOn: new Date(Date.now()).toISOString(),
     }
     
     const orderStringify = JSON.stringify(sendOrder);
@@ -118,7 +115,7 @@ export default function Table() {
               <FlatList
                 data={Object.entries(orderItems)}
                 keyExtractor={item => item[0]}
-                renderItem={item => <SwipeableRow menuId={item.item[0]} orderItem={item.item[1]} />}
+                renderItem={item => <SwipeableRow menuId={item.item[0]} orderItemMenu={item.item[1]} />}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={() => <Divider hasShadow={false}/>}
                 contentContainerStyle={{ height: "100%" }}

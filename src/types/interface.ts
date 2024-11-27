@@ -49,3 +49,8 @@ export interface IOrderItem {
   quantity: number,
   price: number,
 }
+
+export interface IOrderItemMenu extends IOrderItem {
+  menuName: string
+}
+

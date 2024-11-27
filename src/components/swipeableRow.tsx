@@ -2,14 +2,14 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { FC } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
-import { IOrderItem } from "../types/interface";
+import { IOrderItemMenu } from "../types/interface";
 
 interface IProps {
     menuId: string,
-    orderItem: IOrderItem,
+    orderItemMenu: IOrderItemMenu,
 }
 
-const SwipeableRow: FC<IProps> = ({menuId, orderItem}) => {
+const SwipeableRow: FC<IProps> = ({menuId, orderItemMenu}) => {
   const renderRightActions = () => (
     <View className="flex-row w-52 items-center justify-center bg-stone-100">
       <TouchableOpacity 
@@ -42,13 +42,13 @@ const SwipeableRow: FC<IProps> = ({menuId, orderItem}) => {
          border-gray-200 bg-white"
       >
         <View className="flex-row">
-          <Text className="text-lg text-gray-600">{orderItem.quantity}</Text>
+          <Text className="text-lg text-gray-600">{orderItemMenu.quantity}</Text>
           <View className="ml-2">
-            <Text className="text-lg font-bold text-gray-800">{menuId}</Text>
+            <Text className="text-lg font-bold text-gray-800">{orderItemMenu.menuName}</Text>
             <Text className="mt-3 text-gray-400">Vegetables, Well-done</Text>
           </View>
         </View>
-        <Text className="text-lg font-bold">{orderItem.price} €</Text>
+        <Text className="text-lg font-bold">{orderItemMenu.price} €</Text>
       </View>
     </ReanimatedSwipeable>
   );

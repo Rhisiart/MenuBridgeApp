@@ -1,12 +1,12 @@
 import { FC, useEffect, useReducer } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { IMenu, IOrderItem } from "../types/interface";
+import { IMenu, IOrderItemMenu } from "../types/interface";
 
 type action = "increment" | "decrement";
 
 interface IProps {
     menu: IMenu,
-    onChangeMenuQuantity: (menuName: string, orderItem: IOrderItem) => void
+    onChangeMenuQuantity: (menuName: string, orderItem: IOrderItemMenu) => void
 }
 
 const Menu: FC<IProps> = ({ menu, onChangeMenuQuantity }) => {
@@ -36,6 +36,7 @@ const Menu: FC<IProps> = ({ menu, onChangeMenuQuantity }) => {
             ...menu.orderItem,
             price: quantity * menu.price,
             quantity: quantity,
+            menuName: menu.name,
         });
     }, [quantity])
 
