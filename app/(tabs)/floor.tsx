@@ -20,8 +20,6 @@ export default function Floors() {
         }
 
         ws.eventListener.addEvent("Floors", (data: Uint8Array) => {
-            console.log("Getting floors");
-
             const str = Buffer.from(data).toString("utf-8");
             const floors: IFloor[] = JSON.parse(str);
 
@@ -53,7 +51,7 @@ export default function Floors() {
             </View>
             <Divider hasShadow />
             <View className="mt-5">
-            {floorSelected && <Floor floor={floorSelected}/>}
+            {floorSelected && <Floor floor={floorSelected} />}
             </View>
         </View>
     );

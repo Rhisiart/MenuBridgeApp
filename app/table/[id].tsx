@@ -6,7 +6,7 @@ import SwipeableRow from "@/src/components/swipeableRow";
 import Tabbar from "@/src/components/tabbar";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
-import { ICategory, IOrderItemMenu } from "@/src/types/interface";
+import { ICategory, IMenu, IOrderItem, IOrderItemMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -33,6 +33,30 @@ export default function Table() {
 
   buffer[0] = Number(order);
 
+  console.log(`order id = ${order}`);
+
+  const getMenuOrderItem = (menu: IMenu): IMenu => {
+    if(!orderItems) {
+      return menu;
+    }
+
+    const idx = Object.keys(orderItems).findIndex(key => key === String(menu.id));
+
+    if(idx === -1) {
+      return menu;
+    }
+
+    const orderItemObj = Object.values(orderItems)[idx];
+    const orderItem: IOrderItem = menu.orderItem 
+      ? {...menu.orderItem, quantity : orderItemObj.quantity}
+      : {id: -1, quantity : orderItemObj.quantity, price: orderItemObj.price } 
+
+    return {
+      ...menu,
+      orderItem: orderItem
+    }
+  }
+
   const onChangeMenuQuantity = (menuId: string, orderItem: IOrderItemMenu) => {
     setOrderItems(orderItems => ({ ...orderItems, [menuId]: orderItem }));
   }
@@ -43,24 +67,26 @@ export default function Table() {
     }
 
     const sendOrder = {
-      id: Number(order), 
+      id: Number(order),
       customerId: 1,
       orderItems: Object.values(orderItems).map((orderItem, idx) => ({
         ...orderItem, menuId: Number(Object.keys(orderItems)[idx])
       })),
       amount: 100,
-      tableNumber: Number(tableNumber),
-      floorId: Number(floor),
-      tableId: Number(id),
+      floorTable: {
+        number: Number(tableNumber),
+        floorId: Number(floor),
+        tableId: Number(id),
+      },
       statuscode: "In Progress",
       createdOn: new Date(Date.now()).toISOString(),
     }
-    
+
     const orderStringify = JSON.stringify(sendOrder);
     const buf = Buffer.alloc(Buffer.byteLength(orderStringify));
     const len = buf.write(orderStringify);
 
-    ws.send(Commands.Place, 1, buf);  
+    ws.send(Commands.Place, 1, buf);
     router.replace("/floor");
   }
 
@@ -117,7 +143,7 @@ export default function Table() {
                 keyExtractor={item => item[0]}
                 renderItem={item => <SwipeableRow menuId={item.item[0]} orderItemMenu={item.item[1]} />}
                 showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={() => <Divider hasShadow={false}/>}
+                ItemSeparatorComponent={() => <Divider hasShadow={false} />}
                 contentContainerStyle={{ height: "100%" }}
               />
               <Button elememt="modal" onPress={onPressSendButton}>
@@ -132,7 +158,10 @@ export default function Table() {
           {categorySelected && <FlatList
             data={categorySelected.menus}
             keyExtractor={item => `${item.id}_${item.name}`}
-            renderItem={(item) => <Menu menu={item.item} onChangeMenuQuantity={onChangeMenuQuantity} />}
+            renderItem={(item) => <Menu
+              menu={getMenuOrderItem(item.item)}
+              onChangeMenuQuantity={onChangeMenuQuantity}
+            />}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <Divider hasShadow={false} />}
             contentContainerStyle={{ height: "100%" }}

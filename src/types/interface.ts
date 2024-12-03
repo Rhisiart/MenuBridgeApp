@@ -32,13 +32,19 @@ export interface ICategory extends ITab {
   menus: IMenu[],
 }
 
-export interface IOrder {
+interface IFloorTable {
   id: number,
+  number: number,
+  floorId: number,
+  tableId: number,
+}
+
+export interface IOrder {
+  id?: number,
   customerId: number,
   statuscode: string,
   createdOn: string,
-  floorId: number,
-  tableId: number,
+  floorTable: IFloorTable,
 }
 
 export interface IOrderItem {

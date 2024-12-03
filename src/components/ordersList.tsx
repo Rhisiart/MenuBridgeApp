@@ -16,7 +16,7 @@ const OrdersList: FC<IProps> = () => {
             </View>
             <View className="mt-6 ml-8">
                 {orders && orders.length > 0 
-                    ? orders.map(order => (<Order key={order.id} {...order}/>))
+                    ? orders.map(order => (<Order key={order.id} {...order} />))
                     : <Text>Not orders for today yet!</Text>
                 }
             </View>
