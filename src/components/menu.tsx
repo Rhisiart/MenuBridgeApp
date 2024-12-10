@@ -6,7 +6,7 @@ type action = "increment" | "decrement";
 
 interface IProps {
     menu: IMenu,
-    onChangeMenuQuantity: (menuName: string, orderItem: IOrderItemMenu) => void
+    onChangeMenuQuantity: (menuName: number, orderItem?: IOrderItemMenu) => void
 }
 
 const Menu: FC<IProps> = ({ menu, onChangeMenuQuantity }) => {
@@ -27,17 +27,19 @@ const Menu: FC<IProps> = ({ menu, onChangeMenuQuantity }) => {
     );
 
     useEffect(() => {
-        if (quantity <= 0 && !menu.orderItem) {
+        if(!menu.orderItem && quantity === 0)
             return;
-        }
 
-        onChangeMenuQuantity(
-            String(menu.id), {
-            ...menu.orderItem,
-            price: quantity * menu.price,
-            quantity: quantity,
-            menuName: menu.name,
-        });
+        const orderItem = quantity === 0 && menu.orderItem && menu.orderItem.id === -1
+            ? undefined
+            : {
+                id: menu.orderItem ? menu.orderItem.id : -1,
+                price: quantity * menu.price,
+                quantity: quantity,
+                menuName: menu.name,
+            };
+
+        onChangeMenuQuantity(menu.id, orderItem);
     }, [quantity])
 
     return (

@@ -6,7 +6,7 @@ import SwipeableRow from "@/src/components/swipeableRow";
 import Tabbar from "@/src/components/tabbar";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
-import { ICategory, IMenu, IOrderItem, IOrderItemMenu } from "@/src/types/interface";
+import { ICategory, IMenu, IOrderItemMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -16,49 +16,41 @@ type Params = {
   id: string,
   tableNumber: string,
   order: string,
-  floor: string,
 }
 
 export default function Table() {
   const [categories, setCategories] = useState<ICategory[]>();
   const [categorySelected, setCategorySelected] = useState<ICategory>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [orderItems, setOrderItems] = useState<Record<string, IOrderItemMenu>>();
+  const [orderItems, setOrderItems] = useState<Record<string, IOrderItemMenu>>({});
   const [totalItems, setTotalItems] = useState<number>(0);
 
   const ws = useWebSocket();
   const router = useRouter();
-  const { id, order, floor, tableNumber } = useLocalSearchParams<Params>();
+  const { id, order, tableNumber } = useLocalSearchParams<Params>();
   const buffer = new Uint8Array(1);
 
   buffer[0] = Number(order);
 
-  console.log(`order id = ${order}`);
-
   const getMenuOrderItem = (menu: IMenu): IMenu => {
-    if(!orderItems) {
-      return menu;
-    }
+    const key = Object.keys(orderItems).find(key => key === String(menu.id));
 
-    const idx = Object.keys(orderItems).findIndex(key => key === String(menu.id));
-
-    if(idx === -1) {
-      return menu;
-    }
-
-    const orderItemObj = Object.values(orderItems)[idx];
-    const orderItem: IOrderItem = menu.orderItem 
-      ? {...menu.orderItem, quantity : orderItemObj.quantity}
-      : {id: -1, quantity : orderItemObj.quantity, price: orderItemObj.price } 
-
-    return {
-      ...menu,
-      orderItem: orderItem
-    }
+    return !key 
+      ?  menu
+      : { ...menu, orderItem: orderItems[key]};
   }
 
-  const onChangeMenuQuantity = (menuId: string, orderItem: IOrderItemMenu) => {
-    setOrderItems(orderItems => ({ ...orderItems, [menuId]: orderItem }));
+  const onChangeMenuQuantity = (menuId: number, orderItem?: IOrderItemMenu) => {
+    setOrderItems(orderItems => {
+      if(!orderItem) {
+        const { [menuId]: _, ...newObj} = orderItems;
+
+        return newObj;
+      }else {
+        return { ...orderItems, [menuId]: orderItem };
+      }
+    });
+    setTotalItems(total => total++);
   }
 
   const onPressSendButton = () => {
@@ -74,9 +66,8 @@ export default function Table() {
       })),
       amount: 100,
       floorTable: {
+        id: Number(id),
         number: Number(tableNumber),
-        floorId: Number(floor),
-        tableId: Number(id),
       },
       statuscode: "In Progress",
       createdOn: new Date(Date.now()).toISOString(),
@@ -141,9 +132,12 @@ export default function Table() {
               <FlatList
                 data={Object.entries(orderItems)}
                 keyExtractor={item => item[0]}
-                renderItem={item => <SwipeableRow menuId={item.item[0]} orderItemMenu={item.item[1]} />}
+                renderItem={item => {
+                  return item.item[1].quantity > 0 
+                    ? <SwipeableRow menuId={item.item[0]} orderItemMenu={item.item[1]} />
+                    : <></>
+                }}
                 showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={() => <Divider hasShadow={false} />}
                 contentContainerStyle={{ height: "100%" }}
               />
               <Button elememt="modal" onPress={onPressSendButton}>

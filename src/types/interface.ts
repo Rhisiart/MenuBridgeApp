@@ -48,7 +48,7 @@ export interface IOrder {
 }
 
 export interface IOrderItem {
-  id?: number,
+  id: number,
   orderId?: number,
   menuId?: number,
   tableId?: number,

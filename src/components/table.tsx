@@ -16,8 +16,7 @@ const Table: FC<IProps> = ({table, floorId}) => {
             params: { 
                 id: table.id,
                 tableNumber: table.number,
-                order: table.order.id ? table.order.id : -1,
-                floor: floorId,
+                order: table.order.id ? table.order.id : -1
         }}} asChild> 
             <Pressable>
             {table.capacity === 4 ? (
