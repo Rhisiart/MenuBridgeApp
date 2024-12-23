@@ -4,11 +4,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Portal } from "./portal";
 
-const { width, height } = Dimensions.get('window');
-
 type position = "vertical" | "horizontal";
-
-
 
 interface IProps {
     id: string,
@@ -17,6 +13,8 @@ interface IProps {
     children: ReactNode,
     onClose: () => void,
 }
+
+const { width, height } = Dimensions.get('window');
 
 const Modal: FC<IProps> = ({ id, position, visible, children, onClose }) => {
     const sharedValue = position === "horizontal" ? height : width;

@@ -23,7 +23,7 @@ const Menu: FC<IProps> = ({ menu, onChangeMenuQuantity }) => {
 
     const [quantity, dispach] = useReducer(
         reducer,
-        menu.orderItem ? menu.orderItem.quantity : 0
+        menu.orderItem && !isNaN(menu.orderItem.quantity) ? menu.orderItem.quantity : 0
     );
 
     useEffect(() => {

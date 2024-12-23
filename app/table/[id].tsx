@@ -10,13 +10,15 @@ import { ICategory, IMenu, IOrderItemMenu } from "@/src/types/interface";
 import { Buffer } from "buffer";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { Dimensions, FlatList, Text, View } from "react-native";
 
 type Params = {
   id: string,
   tableNumber: string,
   order: string,
 }
+
+const height = Dimensions.get("window").height;
 
 export default function Table() {
   const [categories, setCategories] = useState<ICategory[]>();
@@ -150,16 +152,17 @@ export default function Table() {
         </Modal>
         <View>
           {categorySelected && <FlatList
-            data={categorySelected.menus}
-            keyExtractor={item => `${item.id}_${item.name}`}
-            renderItem={(item) => <Menu
-              menu={getMenuOrderItem(item.item)}
-              onChangeMenuQuantity={onChangeMenuQuantity}
-            />}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={() => <Divider hasShadow={false} />}
-            contentContainerStyle={{ height: "100%" }}
-          />
+              data={categorySelected.menus}
+              extraData={categorySelected}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={item => `${item.id}_${item.name}`}
+              contentContainerStyle={{ paddingBottom: height * 0.3 }}
+              renderItem={(item) => <Menu
+                menu={getMenuOrderItem(item.item)}
+                onChangeMenuQuantity={onChangeMenuQuantity}
+              />}
+              ItemSeparatorComponent={() => <Divider hasShadow={false} />}   
+            />
           }
         </View>
         <Button elememt="screen" onPress={onPressButton}>
@@ -167,7 +170,7 @@ export default function Table() {
             <Text className="text-white">{totalItems} items selected</Text>
             <Text className="text-white">View Order</Text>
           </View>
-        </Button>
+        </Button> 
       </View>
     </View>
   );
