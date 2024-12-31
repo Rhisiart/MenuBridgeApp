@@ -2,12 +2,9 @@ import { FC, ReactNode, useEffect } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
-import { Portal } from "./portal";
-
-type position = "vertical" | "horizontal";
+import { position } from "../types/types";
 
 interface IProps {
-    id: string,
     visible: boolean,
     position: position,
     children: ReactNode,
@@ -16,7 +13,7 @@ interface IProps {
 
 const { width, height } = Dimensions.get('window');
 
-const Modal: FC<IProps> = ({ id, position, visible, children, onClose }) => {
+const Modal: FC<IProps> = ({ position, visible, children, onClose }) => {
     const sharedValue = position === "horizontal" ? height : width;
     const threshold = sharedValue / 3;
 
@@ -100,23 +97,21 @@ const Modal: FC<IProps> = ({ id, position, visible, children, onClose }) => {
     }, [visible]);
 
     return (
-        <Portal id={id}>
-            <Animated.View style={[styles.container, containerStyle]}>
-                <GestureDetector gesture={tap}>
-                    <Animated.View style={[styles.overlayContainer, overlayStyle]} />
-                </GestureDetector>
-                <GestureDetector gesture={pan}>
-                    <Animated.View style={[
-                        styles.modal, 
-                        modalStyle,
-                        position === "vertical" && styles.panel
-                    ]}>
-                        <View style={styles.indicator} />
-                        <View className="w-full mt-10">{children}</View>
-                    </Animated.View>
-                </GestureDetector>
-            </Animated.View>
-        </Portal>
+        <Animated.View style={[styles.container, containerStyle]}>
+            <GestureDetector gesture={tap}>
+                <Animated.View style={[styles.overlayContainer, overlayStyle]} />
+            </GestureDetector>
+            <GestureDetector gesture={pan}>
+                <Animated.View style={[
+                    styles.modal, 
+                    modalStyle,
+                    position === "vertical" && styles.panel
+                ]}>
+                    <View style={styles.indicator} />
+                    <View className="w-full mt-10">{children}</View>
+                </Animated.View>
+            </GestureDetector>
+        </Animated.View>
     );
 };
 

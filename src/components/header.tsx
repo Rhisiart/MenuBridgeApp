@@ -2,9 +2,9 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import Modal from './modal';
+import { usePortal } from '../context/usePortal';
 import OrdersList from './ordersList';
 
 interface IProps {
@@ -14,12 +14,20 @@ interface IProps {
 }
 
 const Header: FC<IProps> = ({title, isStack, hasDivider}) => {
-    const [showOrders, setShowOrders] = useState(false);
-
     const route = useRouter();
+    const { render } = usePortal();
 
-    const onCloseModel = () => {
-        setShowOrders(show => !show);
+    const onPressOrdersButton = () => {
+        const element = (
+            <View>
+                <OrdersList />
+            </View>
+        )
+
+        render({
+            position: "vertical", 
+            nodes: element
+          });
     }
 
     const onClickBack = () => {
@@ -46,18 +54,10 @@ const Header: FC<IProps> = ({title, isStack, hasDivider}) => {
                 }    
                 </View>
                 <Text className="text-xl font-semibold">{title}</Text>
-                <TouchableOpacity onPress={onCloseModel}>
+                <TouchableOpacity onPress={onPressOrdersButton}>
                     <FontAwesome5 name="calendar-alt" size={24} color="black" />
                 </TouchableOpacity>
             </View>
-            <Modal 
-                id="orders"
-                position="vertical"
-                visible={showOrders} 
-                onClose={onCloseModel}
-            >
-                <OrdersList />
-            </Modal>
         </View>
     )
 }

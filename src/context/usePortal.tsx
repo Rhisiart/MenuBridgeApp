@@ -1,68 +1,45 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { createContext, useContext, useState } from "react";
+import Modal from "../components/modal";
+import { position } from "../types/types";
+
+type ModalProps = {
+    position: position,
+    nodes: React.JSX.Element | null
+}
 
 interface IProps {
     children: React.ReactNode,
 }
 interface IPortalContext {
-    render: (key: string, element: ReactNode) => void,
-    remove: (key: string) => void,
+    render: (modalProps: ModalProps) => void,
 }
 
 const PortalContext = createContext<IPortalContext>({
     render: () => {},
-    remove: () => {},
 });
 
 const PortalProvider: React.FC<IProps> = ({children}) => {
-    const [elements, setElements] = useState<Record<string, ReactNode>>({});
+    const [show, setShow] = useState<boolean>(false);
+    const [modalProps, setModalProps] = useState<ModalProps>({nodes: null , position: "vertical"});
 
-    const render = (key: string, element: ReactNode) => {
-        setElements(prev => {
-            return {...prev, [key]: element};
-            /*return Object.keys(prev).indexOf(key) !== -1
-                ? prev 
-                : {...prev, [key]: element};*/
-        });
+    const render = (modalProps: ModalProps) => {
+        setModalProps(modalProps);
+        setShow(true);
     };
-
-    const remove = (key: string) => {
-        setElements(prev => {
-            const { [key]: _, ...rest } = prev;
-
-            return rest;
-        });
-    };
-
-    useEffect(() => {
-        console.log(elements);
-    }, [elements])
 
     return (
-        <PortalContext.Provider value={{ render, remove }}>
+        <PortalContext.Provider value={{ render }}>
             {children}
-            <View style={styles.container} pointerEvents="box-none">
-                {Object.values(elements).map((element, index) => (
-                    <View key={index} style={StyleSheet.absoluteFill}>
-                        {element}
-                    </View>
-                ))}
-            </View>
+            <Modal
+                position={modalProps.position}
+                visible={show}
+                onClose={() => setShow(visible => !visible)}
+            >
+                {modalProps.nodes}
+            </Modal>
         </PortalContext.Provider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 1000,
-        pointerEvents: 'box-none',
-    },
-});
 
 export const usePortal = () => useContext(PortalContext);
 export default PortalProvider;
