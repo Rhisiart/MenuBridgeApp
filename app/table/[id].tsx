@@ -156,7 +156,7 @@ export default function Table() {
               extraData={categorySelected}
               showsVerticalScrollIndicator={false}
               keyExtractor={item => `${item.id}_${item.name}`}
-              contentContainerStyle={{ paddingBottom: height * 0.3 }}
+              //contentContainerStyle={{ paddingBottom: height * 0.05 }}
               renderItem={(item) => <Menu
                 menu={getMenuOrderItem(item.item)}
                 onChangeMenuQuantity={onChangeMenuQuantity}

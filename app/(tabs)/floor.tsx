@@ -51,7 +51,7 @@ export default function Floors() {
             </View>
             <Divider hasShadow />
             <View className="mt-5">
-            {floorSelected && <Floor floor={floorSelected} />}
+                {floorSelected && <Floor floor={floorSelected} />}
             </View>
         </View>
     );

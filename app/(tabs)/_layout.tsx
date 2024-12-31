@@ -17,6 +17,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="home" color={color} />
           ),
+          header: () => <Header title="Home" isStack={false} hasDivider={false} />
         }}
       />
       <Tabs.Screen
@@ -26,7 +27,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="table" color={color} />
           ),
-          header: () => <Header title="Select table" hasDivider={false} />,
+          header: () => <Header title="Select table" isStack={false} hasDivider={false} />,
         }}
       />
     </Tabs>

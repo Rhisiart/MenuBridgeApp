@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import TableScreenHeader from "@/src/components/tableScreenHeader";
 import OrdersProvider from "@/src/context/useOrders";
 import PortalProvider from "@/src/context/usePortal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -10,12 +11,12 @@ import "../src/styles/global.css";
 
 export default function RootLayout() {
   return (
-    <WebSocketProvider url={`ws://${process.env.EXPO_PUBLIC_IP}:8080/ws`}>
-      <SafeAreaProvider>
-        <SafeAreaView className="flex-1 font-roboto">
-          <GestureHandlerRootView>
-            <OrdersProvider>
-              <PortalProvider>
+    <GestureHandlerRootView>
+      <PortalProvider>
+        <WebSocketProvider url={`ws://${process.env.EXPO_PUBLIC_IP}:8080/ws`}>
+          <SafeAreaProvider>
+            <SafeAreaView className="flex-1 font-roboto">
+              <OrdersProvider>
                 <Stack
                   screenOptions={{
                     contentStyle: { backgroundColor: '#fff' },
@@ -31,17 +32,16 @@ export default function RootLayout() {
                   <Stack.Screen
                     name="table/[id]"
                     options={{
-                      title: "Manage order",
                       animation: "default",
+                      header: () => <TableScreenHeader />
                     }}
                   />
                 </Stack>
-
-              </PortalProvider>
-            </OrdersProvider>
-          </GestureHandlerRootView>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </WebSocketProvider>
+              </OrdersProvider>
+            </SafeAreaView>
+          </SafeAreaProvider>
+        </WebSocketProvider>
+      </PortalProvider>
+    </GestureHandlerRootView>
   );
 }

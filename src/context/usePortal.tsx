@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 interface IProps {
@@ -9,20 +9,21 @@ interface IPortalContext {
     remove: (key: string) => void,
 }
 
-interface IElement {
-    [key: string]: ReactNode,
-}
-
 const PortalContext = createContext<IPortalContext>({
     render: () => {},
     remove: () => {},
 });
 
 const PortalProvider: React.FC<IProps> = ({children}) => {
-    const [elements, setElements] = useState<IElement>({});
+    const [elements, setElements] = useState<Record<string, ReactNode>>({});
 
     const render = (key: string, element: ReactNode) => {
-        setElements(prev => ({...prev, [key]: element}));
+        setElements(prev => {
+            return {...prev, [key]: element};
+            /*return Object.keys(prev).indexOf(key) !== -1
+                ? prev 
+                : {...prev, [key]: element};*/
+        });
     };
 
     const remove = (key: string) => {
@@ -32,6 +33,10 @@ const PortalProvider: React.FC<IProps> = ({children}) => {
             return rest;
         });
     };
+
+    useEffect(() => {
+        console.log(elements);
+    }, [elements])
 
     return (
         <PortalContext.Provider value={{ render, remove }}>
