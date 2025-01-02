@@ -12,10 +12,12 @@ interface IProps {
 }
 interface IPortalContext {
     render: (modalProps: ModalProps) => void,
+    close: () => void,
 }
 
 const PortalContext = createContext<IPortalContext>({
     render: () => {},
+    close: () => {},
 });
 
 const PortalProvider: React.FC<IProps> = ({children}) => {
@@ -27,13 +29,17 @@ const PortalProvider: React.FC<IProps> = ({children}) => {
         setShow(true);
     };
 
+    const close = () => {
+        setShow(visible => !visible);
+    };
+
     return (
-        <PortalContext.Provider value={{ render }}>
+        <PortalContext.Provider value={{ render, close }}>
             {children}
             <Modal
                 position={modalProps.position}
                 visible={show}
-                onClose={() => setShow(visible => !visible)}
+                onClose={close}
             >
                 {modalProps.nodes}
             </Modal>

@@ -7,16 +7,11 @@ import { usePortal } from "@/src/context/usePortal";
 import { useWebSocket } from "@/src/context/useWebSocket";
 import { Commands } from "@/src/types/enum";
 import { ICategory, IMenu, IOrderItemMenu } from "@/src/types/interface";
+import { Params } from "@/src/types/types";
 import { Buffer } from "buffer";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Dimensions, FlatList, Text, View } from "react-native";
-
-type Params = {
-  id: string,
-  tableNumber: string,
-  order: string,
-}
 
 const height = Dimensions.get("window").height;
 
@@ -99,7 +94,7 @@ export default function Table() {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ height: "100%" }}
             />
-            <Button elememt="modal" onPress={onPressSendButton}>
+            <Button style="w-11/12 h-16 absolute bg-black rounded-2xl ml-5 bottom-7" onPress={onPressSendButton}>
               <Text className="text-white text-center p-5">Send order</Text>
             </Button>
           </View>
@@ -157,6 +152,7 @@ export default function Table() {
             extraData={categorySelected}
             showsVerticalScrollIndicator={false}
             keyExtractor={item => `${item.id}_${item.name}`}
+            //contentContainerStyle={{ paddingBottom: height * 0.01 }}
             //contentContainerStyle={{ paddingBottom: 10 }}
             renderItem={(item) => <Menu
               menu={getMenuOrderItem(item.item)}
@@ -166,7 +162,10 @@ export default function Table() {
           />
           }
         </View>
-        <Button elememt="screen" onPress={onPressViewOrderButton}>
+        <Button 
+          style="w-11/12 h-16 absolute bg-black rounded-2xl ml-5 bottom-72" 
+          onPress={onPressViewOrderButton}
+        >
           <View className="flex-row justify-between p-5">
             <Text className="text-white">{totalItems} items selected</Text>
             <Text className="text-white">View Order</Text>

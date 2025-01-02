@@ -6,3 +6,8 @@ export enum Commands {
   "Place",
   "Order",
 }
+
+export enum ButtonsTitles {
+  "Complete" = "Mark complete",
+  "Editing" = "Continue editing"
+}

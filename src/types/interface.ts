@@ -32,7 +32,7 @@ export interface ICategory extends ITab {
   menus: IMenu[],
 }
 
-interface IFloorTable {
+export interface IFloorTable {
   id: number,
   number: number,
   floorId: number,

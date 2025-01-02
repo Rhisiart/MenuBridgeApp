@@ -15,6 +15,7 @@ const Table: FC<IProps> = ({table, floorId}) => {
             pathname: "/table/[id]",
             params: { 
                 id: table.id,
+                floorId: floorId,
                 tableNumber: table.number,
                 order: table.order.id ? table.order.id : -1
         }}} asChild> 

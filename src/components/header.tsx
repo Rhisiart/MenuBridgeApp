@@ -22,12 +22,12 @@ const Header: FC<IProps> = ({title, isStack, hasDivider}) => {
             <View>
                 <OrdersList />
             </View>
-        )
+        );
 
         render({
             position: "vertical", 
             nodes: element
-          });
+        });
     }
 
     const onClickBack = () => {
